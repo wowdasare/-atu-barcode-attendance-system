@@ -1,0 +1,164 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Attendance Sessions - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-calendar-check"></i> Attendance Sessions</h2>
+    <div class="d-flex">
+        <form method="get" class="d-flex me-2">
+            <select name="status" class="form-select me-2" onchange="this.form.submit()">
+                <option value="">All Status</option>
+                <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+                <option value="ended" {% if status_filter == 'ended' %}selected{% endif %}>Ended</option>
+                <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+            <select name="course" class="form-select me-2" onchange="this.form.submit()">
+                <option value="">All Courses</option>
+                {% for course in courses %}
+                <option value="{{ course.id }}" {% if course_filter == course.id|stringformat:"s" %}selected{% endif %}>
+                    {{ course.course_code }} - {{ course.course_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+</div>
+
+{% if sessions %}
+<div class="row">
+    {% for session in sessions %}
+    <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ session.course.course_code }}</h6>
+                {% if session.status == 'active' %}
+                    <span class="badge bg-success status-badge">Active</span>
+                {% elif session.status == 'ended' %}
+                    <span class="badge bg-secondary status-badge">Ended</span>
+                {% else %}
+                    <span class="badge bg-danger status-badge">Cancelled</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">{{ session.session_name|default:"Attendance Session" }}</h6>
+                <div class="mb-2">
+                    <small class="text-muted">Course:</small><br>
+                    <strong>{{ session.course.course_name }}</strong>
+                </div>
+                <div class="mb-2">
+                    <small class="text-muted">Date & Time:</small><br>
+                    {{ session.date|date:"M d, Y" }} at {{ session.start_time|time:"H:i" }}
+                </div>
+                {% if session.location %}
+                <div class="mb-2">
+                    <small class="text-muted">Location:</small><br>
+                    {{ session.location }}
+                </div>
+                {% endif %}
+                {% if session.status == 'ended' %}
+                <div class="mb-2">
+                    <small class="text-muted">Duration:</small><br>
+                    {% if session.end_time %}
+                        {{ session.start_time|time:"H:i" }} - {{ session.end_time|time:"H:i" }}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if session.status == 'ended' %}
+                    <small class="text-muted">
+                        Present: {{ session.present_students }}/{{ session.total_students }}
+                        ({{ session.attendance_rate|floatformat:1 }}%)
+                    </small>
+                    {% else %}
+                    <small class="text-muted">{{ session.total_students }} students enrolled</small>
+                    {% endif %}
+                    <a href="{% url 'attendance_web:session-detail' session.session_id %}" class="btn btn-sm btn-primary">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if sessions.has_other_pages %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if sessions.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if status_filter %}&status={{ status_filter }}{% endif %}{% if course_filter %}&course={{ course_filter }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ sessions.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if course_filter %}&course={{ course_filter }}{% endif %}">Previous</a>
+            </li>
+        {% endif %}
+        
+        <li class="page-item active">
+            <span class="page-link">Page {{ sessions.number }} of {{ sessions.paginator.num_pages }}</span>
+        </li>
+        
+        {% if sessions.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ sessions.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if course_filter %}&course={{ course_filter }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ sessions.paginator.num_pages }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if course_filter %}&course={{ course_filter }}{% endif %}">Last</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center">
+    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+    <h4>No Sessions Found</h4>
+    <p class="text-muted">
+        {% if status_filter or course_filter %}
+            No sessions match your filter criteria.
+        {% else %}
+            You haven't created any attendance sessions yet.
+        {% endif %}
+    </p>
+    {% if status_filter or course_filter %}
+        <a href="{% url 'attendance_web:session-list' %}" class="btn btn-primary">Show All Sessions</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <p><strong>Create New Session:</strong></p>
+                        <p class="text-muted">Use the mobile app or API to start a new attendance session for your courses.</p>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <p><strong>View Reports:</strong></p>
+                        <a href="{% url 'attendance_web:course-list' %}" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-chart-bar"></i> Course Reports
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <p><strong>Manage System:</strong></p>
+                        <a href="/admin/" class="btn btn-sm btn-outline-warning">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
