@@ -773,10 +773,26 @@ def generate_student_barcode(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     
     try:
+        # Debug info
+        print(f"[DEBUG] Generating barcode for student: {student.student_id}")
+        print(f"[DEBUG] Student barcode_id: {student.barcode_id}")
+        print(f"[DEBUG] Current barcode_image: {student.barcode_image}")
+        
         # Force barcode generation
         student.generate_barcode()
-        messages.success(request, f'Barcode generated successfully for {student.first_name} {student.last_name}!')
+        student.refresh_from_db()
+        
+        print(f"[DEBUG] After generation - barcode_image: {student.barcode_image}")
+        
+        if student.barcode_image:
+            messages.success(request, f'Barcode generated successfully for {student.first_name} {student.last_name}!')
+        else:
+            messages.warning(request, f'Barcode generation completed but image not saved. Check media configuration.')
+            
     except Exception as e:
+        print(f"[DEBUG] Barcode generation error: {str(e)}")
+        import traceback
+        print(f"[DEBUG] Full traceback: {traceback.format_exc()}")
         messages.error(request, f'Error generating barcode: {str(e)}')
     
     return redirect('attendance_web:manage_students')
