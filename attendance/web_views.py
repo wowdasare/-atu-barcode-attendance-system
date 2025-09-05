@@ -256,6 +256,9 @@ def is_admin(user):
 @login_required
 @user_passes_test(is_admin)
 def admin_dashboard(request):
+    # Debug: Log that this view is being accessed
+    print(f"[DEBUG] Admin dashboard accessed by user: {request.user.username}")
+    
     # Get system statistics
     total_users = User.objects.count()
     total_lecturers = Lecturer.objects.count()
@@ -283,6 +286,7 @@ def admin_dashboard(request):
 @login_required
 @user_passes_test(is_admin)
 def manage_lecturers(request):
+    print(f"[DEBUG] Manage lecturers accessed by user: {request.user.username}")
     lecturers = Lecturer.objects.select_related('user').order_by('lecturer_id')
     
     # Search functionality
