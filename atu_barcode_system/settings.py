@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    # 'attendance',  # Temporarily disabled to test
+    'attendance',
 ]
 
 MIDDLEWARE = [
