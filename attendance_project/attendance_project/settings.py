@@ -128,14 +128,17 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -164,3 +167,16 @@ CORS_ALLOWED_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+# CSRF settings for API
+CSRF_TRUSTED_ORIGINS = []
+if 'RAILWAY_STATIC_URL' in os.environ:
+    railway_url = os.environ.get('RAILWAY_STATIC_URL', '')
+    if railway_url:
+        CSRF_TRUSTED_ORIGINS.append(railway_url)
+
+# Add Railway domains to CSRF trusted origins
+CSRF_TRUSTED_ORIGINS.extend([
+    'https://*.railway.app',
+    'https://*.up.railway.app',
+])

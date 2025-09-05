@@ -6,6 +6,8 @@ from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 import csv
 from datetime import datetime, timedelta
 
@@ -17,6 +19,7 @@ from .serializers import (
 )
 
 
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
