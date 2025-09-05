@@ -8,7 +8,28 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# ALLOWED_HOSTS configuration for Railway
+ALLOWED_HOSTS = []
+if 'RAILWAY_PUBLIC_DOMAIN' in os.environ:
+    ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
+if 'RAILWAY_STATIC_URL' in os.environ:
+    railway_domain = os.environ.get('RAILWAY_STATIC_URL', '').replace('https://', '').replace('http://', '')
+    if railway_domain:
+        ALLOWED_HOSTS.append(railway_domain)
+
+# Add custom hosts from environment
+custom_hosts = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS.extend(custom_hosts.split(','))
+
+# Remove duplicates and empty strings
+ALLOWED_HOSTS = list(filter(None, set(ALLOWED_HOSTS)))
+
+# For development
+if DEBUG:
+    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1', '0.0.0.0'])
+
+# Railway domains (fallback)
+ALLOWED_HOSTS.extend(['.railway.app', '.up.railway.app'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
