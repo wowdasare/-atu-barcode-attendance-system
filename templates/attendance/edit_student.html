@@ -1,0 +1,96 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Edit Student - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-edit"></i> Edit Student</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'attendance_web:manage_students' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Students
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="student_id" class="form-label">Student ID *</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" value="{{ student.student_id }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ student.email }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name *</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ student.first_name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ student.last_name }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="program" class="form-label">Program *</label>
+                            <select class="form-select" id="program" name="program" required>
+                                <option value="">Select Program</option>
+                                <option value="BSc Computer Science" {% if student.program == "BSc Computer Science" %}selected{% endif %}>BSc Computer Science</option>
+                                <option value="BSc Information Technology" {% if student.program == "BSc Information Technology" %}selected{% endif %}>BSc Information Technology</option>
+                                <option value="BSc Software Engineering" {% if student.program == "BSc Software Engineering" %}selected{% endif %}>BSc Software Engineering</option>
+                                <option value="BSc Data Science" {% if student.program == "BSc Data Science" %}selected{% endif %}>BSc Data Science</option>
+                                <option value="BSc Cybersecurity" {% if student.program == "BSc Cybersecurity" %}selected{% endif %}>BSc Cybersecurity</option>
+                                <option value="BSc Business Administration" {% if student.program == "BSc Business Administration" %}selected{% endif %}>BSc Business Administration</option>
+                                <option value="Other" {% if student.program == "Other" %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="level" class="form-label">Level *</label>
+                            <select class="form-select" id="level" name="level" required>
+                                <option value="">Select Level</option>
+                                <option value="100" {% if student.level == "100" %}selected{% endif %}>Level 100</option>
+                                <option value="200" {% if student.level == "200" %}selected{% endif %}>Level 200</option>
+                                <option value="300" {% if student.level == "300" %}selected{% endif %}>Level 300</option>
+                                <option value="400" {% if student.level == "400" %}selected{% endif %}>Level 400</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Student Status:</strong> 
+                        {% if student.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                        {% endif %}
+                        <br>
+                        <strong>Created:</strong> {{ student.created_at|date:"Y-m-d H:i" }}
+                        {% if student.barcode_id %}
+                        <br><strong>Barcode ID:</strong> {{ student.barcode_id }}
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'attendance_web:manage_students' %}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Student
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -639,3 +639,128 @@ def export_attendance_csv(request, course_id=None):
             ])
     
     return response
+
+
+# Edit/View/Delete Actions
+@login_required
+@user_passes_test(is_admin)
+def edit_student(request, student_id):
+    """Edit student details"""
+    student = get_object_or_404(Student, id=student_id)
+    
+    if request.method == 'POST':
+        # Update student data
+        student.student_id = request.POST.get('student_id')
+        student.first_name = request.POST.get('first_name')
+        student.last_name = request.POST.get('last_name')
+        student.email = request.POST.get('email')
+        student.program = request.POST.get('program')
+        student.level = request.POST.get('level')
+        
+        try:
+            student.save()
+            messages.success(request, f'Student {student.first_name} {student.last_name} updated successfully!')
+            return redirect('attendance_web:manage_students')
+        except Exception as e:
+            messages.error(request, f'Error updating student: {str(e)}')
+    
+    context = {
+        'student': student,
+        'is_edit': True
+    }
+    return render(request, 'attendance/edit_student.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def edit_lecturer(request, lecturer_id):
+    """Edit lecturer details"""
+    lecturer = get_object_or_404(Lecturer, id=lecturer_id)
+    
+    if request.method == 'POST':
+        # Update lecturer and user data
+        lecturer.user.first_name = request.POST.get('first_name')
+        lecturer.user.last_name = request.POST.get('last_name')
+        lecturer.user.email = request.POST.get('email')
+        lecturer.lecturer_id = request.POST.get('lecturer_id')
+        lecturer.department = request.POST.get('department')
+        
+        try:
+            lecturer.user.save()
+            lecturer.save()
+            messages.success(request, f'Lecturer {lecturer.user.first_name} {lecturer.user.last_name} updated successfully!')
+            return redirect('attendance_web:manage_lecturers')
+        except Exception as e:
+            messages.error(request, f'Error updating lecturer: {str(e)}')
+    
+    context = {
+        'lecturer': lecturer,
+        'is_edit': True
+    }
+    return render(request, 'attendance/edit_lecturer.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_course_students(request, course_id):
+    """Manage students enrolled in a course"""
+    course = get_object_or_404(Course, id=course_id)
+    
+    if request.method == 'POST':
+        # Handle student enrollment/removal
+        action = request.POST.get('action')
+        student_ids = request.POST.getlist('student_ids')
+        
+        if action == 'enroll':
+            for student_id in student_ids:
+                student = Student.objects.get(id=student_id)
+                course.students.add(student)
+            messages.success(request, f'Enrolled {len(student_ids)} students in {course.course_code}')
+        elif action == 'remove':
+            for student_id in student_ids:
+                student = Student.objects.get(id=student_id)
+                course.students.remove(student)
+            messages.success(request, f'Removed {len(student_ids)} students from {course.course_code}')
+        
+        return redirect('attendance_web:manage_course_students', course_id=course_id)
+    
+    # Get enrolled and available students
+    enrolled_students = course.students.filter(is_active=True).order_by('student_id')
+    available_students = Student.objects.filter(
+        is_active=True
+    ).exclude(
+        id__in=enrolled_students.values_list('id', flat=True)
+    ).order_by('student_id')
+    
+    context = {
+        'course': course,
+        'enrolled_students': enrolled_students,
+        'available_students': available_students,
+    }
+    return render(request, 'attendance/manage_course_students.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def toggle_student_status(request, student_id):
+    """Toggle student active/inactive status"""
+    student = get_object_or_404(Student, id=student_id)
+    student.is_active = not student.is_active
+    student.save()
+    
+    status = "activated" if student.is_active else "deactivated"
+    messages.success(request, f'Student {student.first_name} {student.last_name} {status} successfully!')
+    return redirect('attendance_web:manage_students')
+
+
+@login_required
+@user_passes_test(is_admin)
+def toggle_lecturer_status(request, lecturer_id):
+    """Toggle lecturer active/inactive status"""
+    lecturer = get_object_or_404(Lecturer, id=lecturer_id)
+    lecturer.user.is_active = not lecturer.user.is_active
+    lecturer.user.save()
+    
+    status = "activated" if lecturer.user.is_active else "deactivated"
+    messages.success(request, f'Lecturer {lecturer.user.first_name} {lecturer.user.last_name} {status} successfully!')
+    return redirect('attendance_web:manage_lecturers')

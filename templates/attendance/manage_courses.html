@@ -66,17 +66,11 @@
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-outline-primary" title="Edit">
-                                    <i class="fas fa-edit"></i>
+                                <a href="{% url 'attendance_web:manage_course_students' course.id %}" class="btn btn-outline-success" title="Manage Students">
+                                    <i class="fas fa-users"></i> Students
                                 </a>
-                                <a href="#" class="btn btn-outline-info" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-success" title="Manage Students">
-                                    <i class="fas fa-users"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger" title="Deactivate">
-                                    <i class="fas fa-ban"></i>
+                                <a href="{% url 'attendance_web:export_course_attendance' course.id %}" class="btn btn-outline-info" title="Export Attendance">
+                                    <i class="fas fa-download"></i>
                                 </a>
                             </div>
                         </td>

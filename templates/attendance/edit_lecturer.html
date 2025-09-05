@@ -1,0 +1,88 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Edit Lecturer - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-edit"></i> Edit Lecturer</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'attendance_web:manage_lecturers' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Lecturers
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name *</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ lecturer.user.first_name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ lecturer.user.last_name }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ lecturer.user.email }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lecturer_id" class="form-label">Lecturer ID *</label>
+                            <input type="text" class="form-control" id="lecturer_id" name="lecturer_id" value="{{ lecturer.lecturer_id }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department *</label>
+                        <select class="form-select" id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science" {% if lecturer.department == "Computer Science" %}selected{% endif %}>Computer Science</option>
+                            <option value="Information Technology" {% if lecturer.department == "Information Technology" %}selected{% endif %}>Information Technology</option>
+                            <option value="Software Engineering" {% if lecturer.department == "Software Engineering" %}selected{% endif %}>Software Engineering</option>
+                            <option value="Data Science" {% if lecturer.department == "Data Science" %}selected{% endif %}>Data Science</option>
+                            <option value="Cybersecurity" {% if lecturer.department == "Cybersecurity" %}selected{% endif %}>Cybersecurity</option>
+                            <option value="Business Administration" {% if lecturer.department == "Business Administration" %}selected{% endif %}>Business Administration</option>
+                            <option value="Mathematics" {% if lecturer.department == "Mathematics" %}selected{% endif %}>Mathematics</option>
+                            <option value="Physics" {% if lecturer.department == "Physics" %}selected{% endif %}>Physics</option>
+                            <option value="Engineering" {% if lecturer.department == "Engineering" %}selected{% endif %}>Engineering</option>
+                            <option value="Other" {% if lecturer.department == "Other" %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Account Status:</strong> 
+                        {% if lecturer.user.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                        {% endif %}
+                        <br>
+                        <strong>Username:</strong> {{ lecturer.user.username }}
+                        <br>
+                        <strong>Created:</strong> {{ lecturer.created_at|date:"Y-m-d H:i" }}
+                        <br>
+                        <strong>Total Courses:</strong> {{ lecturer.courses.count }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'attendance_web:manage_lecturers' %}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Lecturer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
