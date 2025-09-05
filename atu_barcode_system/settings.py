@@ -146,4 +146,9 @@ CORS_ALLOWED_HEADERS = [
 CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
     'https://*.up.railway.app',
+    'https://web-production-d4903.up.railway.app',
 ]
+
+# Disable CSRF for now to test
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = None
