@@ -17,13 +17,13 @@ urlpatterns = [
     path('students/', web_views.student_list, name='student-list'),
     
     # Debug route
-    path('admin/debug/', web_views.admin_debug, name='admin_debug'),
+    path('system/debug/', web_views.admin_debug, name='admin_debug'),
     
-    # Admin routes
+    # Admin routes (changed prefix to avoid Django admin conflict)
     path('admin-dashboard/', web_views.admin_dashboard, name='admin_dashboard'),
-    path('admin/lecturers/', web_views.manage_lecturers, name='manage_lecturers'),
-    path('admin/lecturers/add/', web_views.add_lecturer, name='add_lecturer'),
-    path('admin/students/', web_views.manage_students, name='manage_students'),
-    path('admin/students/add/', web_views.add_student, name='add_student'),
-    path('admin/courses/', web_views.manage_courses, name='manage_courses'),
+    path('system/lecturers/', web_views.manage_lecturers, name='manage_lecturers'),
+    path('system/lecturers/add/', web_views.add_lecturer, name='add_lecturer'),
+    path('system/students/', web_views.manage_students, name='manage_students'),
+    path('system/students/add/', web_views.add_student, name='add_student'),
+    path('system/courses/', web_views.manage_courses, name='manage_courses'),
 ]

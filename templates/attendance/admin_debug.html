@@ -57,10 +57,16 @@
             </table>
             
             <div class="alert alert-info">
-                <h5>Test Links:</h5>
+                <h5>Test Links (Fixed URLs):</h5>
                 <a href="{% url 'attendance_web:admin_dashboard' %}" class="btn btn-primary me-2">Admin Dashboard</a>
-                <a href="{% url 'attendance_web:manage_lecturers' %}" class="btn btn-info me-2">Manage Lecturers</a>
-                <a href="{% url 'attendance_web:manage_courses' %}" class="btn btn-warning">Manage Courses</a>
+                <a href="{% url 'attendance_web:manage_lecturers' %}" class="btn btn-info me-2">Manage Lecturers (system/lecturers/)</a>
+                <a href="{% url 'attendance_web:manage_students' %}" class="btn btn-success me-2">Manage Students (system/students/)</a>
+                <a href="{% url 'attendance_web:manage_courses' %}" class="btn btn-warning">Manage Courses (system/courses/)</a>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>Issue Found:</strong> Django admin at /admin/ was intercepting our admin routes. 
+                <br>Fixed by changing URLs from /admin/ to /system/
             </div>
         </div>
     </div>
