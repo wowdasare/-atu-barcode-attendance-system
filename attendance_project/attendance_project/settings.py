@@ -168,15 +168,27 @@ CORS_ALLOWED_HEADERS = [
     'x-requested-with',
 ]
 
-# CSRF settings for API
+# CSRF settings for API - must include scheme (https://) for Django 4.0+
 CSRF_TRUSTED_ORIGINS = []
+
+# Add Railway URL from environment
 if 'RAILWAY_STATIC_URL' in os.environ:
     railway_url = os.environ.get('RAILWAY_STATIC_URL', '')
+    if railway_url and not railway_url.startswith(('http://', 'https://')):
+        railway_url = f'https://{railway_url}'
     if railway_url:
         CSRF_TRUSTED_ORIGINS.append(railway_url)
 
-# Add Railway domains to CSRF trusted origins
+# Add Railway domain patterns
 CSRF_TRUSTED_ORIGINS.extend([
     'https://*.railway.app',
     'https://*.up.railway.app',
 ])
+
+# Add the specific Railway deployment URL
+if 'RAILWAY_PUBLIC_DOMAIN' in os.environ:
+    domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '')
+    if domain and not domain.startswith(('http://', 'https://')):
+        domain = f'https://{domain}'
+    if domain:
+        CSRF_TRUSTED_ORIGINS.append(domain)
