@@ -27,4 +27,11 @@ urlpatterns = [
     path('system/students/add/', web_views.add_student, name='add_student'),
     path('system/courses/', web_views.manage_courses, name='manage_courses'),
     path('system/courses/add/', web_views.add_course, name='add_course'),
+    
+    # CSV Export routes
+    path('export/students/', web_views.export_students_csv, name='export_students'),
+    path('export/lecturers/', web_views.export_lecturers_csv, name='export_lecturers'),
+    path('export/courses/', web_views.export_courses_csv, name='export_courses'),
+    path('export/attendance/', web_views.export_attendance_csv, name='export_attendance'),
+    path('export/attendance/<int:course_id>/', web_views.export_attendance_csv, name='export_course_attendance'),
 ]

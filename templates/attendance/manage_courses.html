@@ -6,9 +6,16 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><i class="fas fa-book"></i> Manage Courses</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{% url 'attendance_web:add_course' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Course
-        </a>
+        <div class="btn-group me-2">
+            <a href="{% url 'attendance_web:add_course' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Course
+            </a>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'attendance_web:export_courses' %}" class="btn btn-success">
+                <i class="fas fa-download"></i> Export CSV
+            </a>
+        </div>
     </div>
 </div>
 

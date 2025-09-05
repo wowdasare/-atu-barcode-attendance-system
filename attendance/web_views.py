@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Avg
 from datetime import datetime, timedelta
 from django.utils import timezone
+import csv
 
 from .models import Student, Lecturer, Course, AttendanceSession, AttendanceRecord
 
@@ -503,3 +504,138 @@ def add_course(request):
     }
     
     return render(request, 'attendance/add_course.html', context)
+
+
+# CSV Export Functions
+@login_required
+@user_passes_test(is_admin)
+def export_students_csv(request):
+    """Export all students to CSV"""
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="students_export.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Student ID', 'First Name', 'Last Name', 'Email', 'Program', 'Level', 'Status', 'Created Date'])
+    
+    students = Student.objects.filter(is_active=True).order_by('student_id')
+    for student in students:
+        writer.writerow([
+            student.student_id,
+            student.first_name,
+            student.last_name,
+            student.email,
+            student.program,
+            student.level,
+            'Active' if student.is_active else 'Inactive',
+            student.created_at.strftime('%Y-%m-%d')
+        ])
+    
+    return response
+
+
+@login_required
+@user_passes_test(is_admin)
+def export_lecturers_csv(request):
+    """Export all lecturers to CSV"""
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="lecturers_export.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Lecturer ID', 'First Name', 'Last Name', 'Email', 'Username', 'Department', 'Status', 'Created Date'])
+    
+    lecturers = Lecturer.objects.select_related('user').order_by('lecturer_id')
+    for lecturer in lecturers:
+        writer.writerow([
+            lecturer.lecturer_id,
+            lecturer.user.first_name,
+            lecturer.user.last_name,
+            lecturer.user.email,
+            lecturer.user.username,
+            lecturer.department,
+            'Active' if lecturer.user.is_active else 'Inactive',
+            lecturer.created_at.strftime('%Y-%m-%d')
+        ])
+    
+    return response
+
+
+@login_required
+@user_passes_test(is_admin)
+def export_courses_csv(request):
+    """Export all courses to CSV"""
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="courses_export.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Course Code', 'Course Name', 'Lecturer', 'Department', 'Credit Hours', 'Semester', 'Academic Year', 'Total Students', 'Status'])
+    
+    courses = Course.objects.filter(is_active=True).select_related('lecturer').order_by('course_code')
+    for course in courses:
+        writer.writerow([
+            course.course_code,
+            course.course_name,
+            f"{course.lecturer.user.first_name} {course.lecturer.user.last_name}",
+            course.lecturer.department,
+            course.credit_hours,
+            course.semester,
+            course.academic_year,
+            course.students.count(),
+            'Active' if course.is_active else 'Inactive'
+        ])
+    
+    return response
+
+
+@login_required
+def export_attendance_csv(request, course_id=None):
+    """Export attendance records to CSV"""
+    # Allow both admin and lecturers to export attendance
+    if not (request.user.is_superuser or hasattr(request.user, 'lecturer')):
+        messages.error(request, 'Access denied.')
+        return redirect('attendance_web:login')
+    
+    response = HttpResponse(content_type='text/csv')
+    
+    if course_id:
+        try:
+            course = Course.objects.get(id=course_id)
+            # Check if lecturer owns the course (unless admin)
+            if not request.user.is_superuser and hasattr(request.user, 'lecturer'):
+                if course.lecturer != request.user.lecturer:
+                    messages.error(request, 'Access denied to this course.')
+                    return redirect('attendance_web:dashboard')
+            
+            filename = f"attendance_{course.course_code}.csv"
+            sessions = AttendanceSession.objects.filter(course=course)
+        except Course.DoesNotExist:
+            messages.error(request, 'Course not found.')
+            return redirect('attendance_web:dashboard')
+    else:
+        # Export all attendance (admin only)
+        if not request.user.is_superuser:
+            messages.error(request, 'Access denied.')
+            return redirect('attendance_web:dashboard')
+        filename = "attendance_all_courses.csv"
+        sessions = AttendanceSession.objects.all()
+    
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Date', 'Course Code', 'Course Name', 'Session Name', 'Student ID', 'Student Name', 'Status', 'Check-in Time', 'Lecturer'])
+    
+    for session in sessions.select_related('course', 'lecturer').order_by('-date'):
+        records = AttendanceRecord.objects.filter(session=session).select_related('student')
+        for record in records:
+            writer.writerow([
+                session.date.strftime('%Y-%m-%d'),
+                session.course.course_code,
+                session.course.course_name,
+                session.session_name or f"Session {session.date}",
+                record.student.student_id,
+                f"{record.student.first_name} {record.student.last_name}",
+                record.status.title(),
+                record.check_in_time.strftime('%Y-%m-%d %H:%M:%S') if record.check_in_time else '',
+                f"{session.lecturer.user.first_name} {session.lecturer.user.last_name}"
+            ])
+    
+    return response
