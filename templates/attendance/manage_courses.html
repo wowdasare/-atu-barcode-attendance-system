@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><i class="fas fa-book"></i> Manage Courses</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="#" class="btn btn-primary">
+        <a href="{% url 'attendance_web:add_course' %}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Course
         </a>
     </div>
@@ -34,7 +34,7 @@
                         <th>Course Code</th>
                         <th>Course Name</th>
                         <th>Lecturer</th>
-                        <th>Credits</th>
+                        <th>Credit Hours</th>
                         <th>Students</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -46,7 +46,7 @@
                         <td><strong>{{ course.course_code }}</strong></td>
                         <td>{{ course.course_name }}</td>
                         <td>{{ course.lecturer.user.first_name }} {{ course.lecturer.user.last_name }}</td>
-                        <td>{{ course.credits }}</td>
+                        <td>{{ course.credit_hours }}</td>
                         <td>
                             <span class="badge bg-info">{{ course.students.count }}</span>
                         </td>

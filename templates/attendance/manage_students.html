@@ -35,7 +35,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Program</th>
-                        <th>Year</th>
+                        <th>Level</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -47,7 +47,7 @@
                         <td>{{ student.first_name }} {{ student.last_name }}</td>
                         <td>{{ student.email }}</td>
                         <td>{{ student.program }}</td>
-                        <td>Year {{ student.year_of_study }}</td>
+                        <td>Level {{ student.level }}</td>
                         <td>
                             {% if student.is_active %}
                                 <span class="badge bg-success">Active</span>

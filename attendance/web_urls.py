@@ -26,4 +26,5 @@ urlpatterns = [
     path('system/students/', web_views.manage_students, name='manage_students'),
     path('system/students/add/', web_views.add_student, name='add_student'),
     path('system/courses/', web_views.manage_courses, name='manage_courses'),
+    path('system/courses/add/', web_views.add_course, name='add_course'),
 ]

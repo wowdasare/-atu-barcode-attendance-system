@@ -409,7 +409,7 @@ def add_student(request):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         program = request.POST.get('program')
-        year_of_study = request.POST.get('year_of_study')
+        level = request.POST.get('level')
         
         try:
             # Create student
@@ -419,7 +419,7 @@ def add_student(request):
                 last_name=last_name,
                 email=email,
                 program=program,
-                year_of_study=int(year_of_study),
+                level=level,
                 is_active=True
             )
             
@@ -458,3 +458,48 @@ def manage_courses(request):
     }
     
     return render(request, 'attendance/manage_courses.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def add_course(request):
+    if request.method == 'POST':
+        # Get form data
+        course_code = request.POST.get('course_code')
+        course_name = request.POST.get('course_name')
+        description = request.POST.get('description')
+        lecturer_id = request.POST.get('lecturer_id')
+        credit_hours = request.POST.get('credit_hours')
+        semester = request.POST.get('semester')
+        academic_year = request.POST.get('academic_year')
+        
+        try:
+            # Get lecturer
+            lecturer = Lecturer.objects.get(id=lecturer_id)
+            
+            # Create course
+            course = Course.objects.create(
+                course_code=course_code,
+                course_name=course_name,
+                description=description,
+                lecturer=lecturer,
+                credit_hours=int(credit_hours),
+                semester=semester,
+                academic_year=academic_year,
+                is_active=True
+            )
+            
+            messages.success(request, f'Course {course_code} - {course_name} created successfully!')
+            return redirect('attendance_web:manage_courses')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating course: {str(e)}')
+    
+    # Get all lecturers for the dropdown
+    lecturers = Lecturer.objects.filter(user__is_active=True).select_related('user')
+    
+    context = {
+        'lecturers': lecturers,
+    }
+    
+    return render(request, 'attendance/add_course.html', context)
