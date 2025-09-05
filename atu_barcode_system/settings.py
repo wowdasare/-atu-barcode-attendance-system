@@ -8,28 +8,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-# ALLOWED_HOSTS configuration for Railway
-ALLOWED_HOSTS = []
-if 'RAILWAY_PUBLIC_DOMAIN' in os.environ:
-    ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
-if 'RAILWAY_STATIC_URL' in os.environ:
-    railway_domain = os.environ.get('RAILWAY_STATIC_URL', '').replace('https://', '').replace('http://', '')
-    if railway_domain:
-        ALLOWED_HOSTS.append(railway_domain)
-
-# Add custom hosts from environment
-custom_hosts = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
-ALLOWED_HOSTS.extend(custom_hosts.split(','))
-
-# Remove duplicates and empty strings
-ALLOWED_HOSTS = list(filter(None, set(ALLOWED_HOSTS)))
-
-# For development
-if DEBUG:
-    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1', '0.0.0.0'])
-
-# Railway domains (fallback)
-ALLOWED_HOSTS.extend(['.railway.app', '.up.railway.app'])
+# Simple ALLOWED_HOSTS - allow all for now to avoid issues
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,7 +21,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'attendance',
+    # 'attendance',  # Temporarily disabled to test
 ]
 
 MIDDLEWARE = [
@@ -136,26 +116,10 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
-
-CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL_ORIGINS', 'True').lower() == 'true'
-
-# Add Railway domain to CORS when deployed
-if 'RAILWAY_STATIC_URL' in os.environ:
-    railway_domain = os.environ.get('RAILWAY_STATIC_URL', '').replace('https://', '')
-    if railway_domain:
-        CORS_ALLOWED_ORIGINS.append(f"https://{railway_domain}")
-
+# CORS - allow all origins for now
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_HEADERS = [
     'accept',
     'accept-encoding',
@@ -168,43 +132,8 @@ CORS_ALLOWED_HEADERS = [
     'x-requested-with',
 ]
 
-# CSRF settings for API - must include scheme (https://) for Django 4.0+
-CSRF_TRUSTED_ORIGINS = []
-
-# Check common Railway environment variables and ensure they have https:// scheme
-potential_railway_vars = [
-    'RAILWAY_STATIC_URL',
-    'RAILWAY_PUBLIC_DOMAIN', 
-    'RAILWAY_DOMAIN',
-    'PUBLIC_DOMAIN',
-    'DOMAIN'
-]
-
-for var_name in potential_railway_vars:
-    if var_name in os.environ:
-        raw_domain = os.environ.get(var_name, '')
-        if raw_domain and raw_domain.strip():
-            # Ensure it has https:// scheme
-            if not raw_domain.startswith(('http://', 'https://')):
-                domain_with_scheme = f'https://{raw_domain.strip()}'
-            else:
-                domain_with_scheme = raw_domain.strip()
-            
-            if domain_with_scheme not in CSRF_TRUSTED_ORIGINS:
-                CSRF_TRUSTED_ORIGINS.append(domain_with_scheme)
-
-# Add Railway domain patterns as fallbacks
-CSRF_TRUSTED_ORIGINS.extend([
+# CSRF - keep it simple
+CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
     'https://*.up.railway.app',
-])
-
-# Final cleanup: ensure all origins have proper scheme and remove duplicates
-final_origins = []
-for origin in CSRF_TRUSTED_ORIGINS:
-    if origin and not origin.startswith(('http://', 'https://')):
-        origin = f'https://{origin}'
-    if origin and origin not in final_origins:
-        final_origins.append(origin)
-
-CSRF_TRUSTED_ORIGINS = final_origins
+]
