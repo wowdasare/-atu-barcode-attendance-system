@@ -58,9 +58,19 @@ WSGI_APPLICATION = 'atu_barcode_system.wsgi.application'
 
 # Database configuration
 if 'DATABASE_URL' in os.environ:
-    DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
-    }
+    try:
+        DATABASES = {
+            'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+        }
+    except Exception as e:
+        print(f"DATABASE_URL parsing error: {e}")
+        print(f"DATABASE_URL value: {os.environ.get('DATABASE_URL', 'Not set')}")
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 else:
     DATABASES = {
         'default': {
