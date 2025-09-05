@@ -171,24 +171,40 @@ CORS_ALLOWED_HEADERS = [
 # CSRF settings for API - must include scheme (https://) for Django 4.0+
 CSRF_TRUSTED_ORIGINS = []
 
-# Add Railway URL from environment
-if 'RAILWAY_STATIC_URL' in os.environ:
-    railway_url = os.environ.get('RAILWAY_STATIC_URL', '')
-    if railway_url and not railway_url.startswith(('http://', 'https://')):
-        railway_url = f'https://{railway_url}'
-    if railway_url:
-        CSRF_TRUSTED_ORIGINS.append(railway_url)
+# Check common Railway environment variables and ensure they have https:// scheme
+potential_railway_vars = [
+    'RAILWAY_STATIC_URL',
+    'RAILWAY_PUBLIC_DOMAIN', 
+    'RAILWAY_DOMAIN',
+    'PUBLIC_DOMAIN',
+    'DOMAIN'
+]
 
-# Add Railway domain patterns
+for var_name in potential_railway_vars:
+    if var_name in os.environ:
+        raw_domain = os.environ.get(var_name, '')
+        if raw_domain and raw_domain.strip():
+            # Ensure it has https:// scheme
+            if not raw_domain.startswith(('http://', 'https://')):
+                domain_with_scheme = f'https://{raw_domain.strip()}'
+            else:
+                domain_with_scheme = raw_domain.strip()
+            
+            if domain_with_scheme not in CSRF_TRUSTED_ORIGINS:
+                CSRF_TRUSTED_ORIGINS.append(domain_with_scheme)
+
+# Add Railway domain patterns as fallbacks
 CSRF_TRUSTED_ORIGINS.extend([
     'https://*.railway.app',
     'https://*.up.railway.app',
 ])
 
-# Add the specific Railway deployment URL
-if 'RAILWAY_PUBLIC_DOMAIN' in os.environ:
-    domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '')
-    if domain and not domain.startswith(('http://', 'https://')):
-        domain = f'https://{domain}'
-    if domain:
-        CSRF_TRUSTED_ORIGINS.append(domain)
+# Final cleanup: ensure all origins have proper scheme and remove duplicates
+final_origins = []
+for origin in CSRF_TRUSTED_ORIGINS:
+    if origin and not origin.startswith(('http://', 'https://')):
+        origin = f'https://{origin}'
+    if origin and origin not in final_origins:
+        final_origins.append(origin)
+
+CSRF_TRUSTED_ORIGINS = final_origins
