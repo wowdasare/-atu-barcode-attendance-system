@@ -133,9 +133,13 @@
                     </div>
                     <div class="col-md-6">
                         <p><strong>Manage Students:</strong></p>
-                        <a href="/admin/attendance/student/" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-cog"></i> Admin Panel - Students
-                        </a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'attendance_web:manage_students' %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-cog"></i> Admin - Manage Students
+                            </a>
+                        {% else %}
+                            <p class="text-muted small">Contact administrator to manage student information.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
