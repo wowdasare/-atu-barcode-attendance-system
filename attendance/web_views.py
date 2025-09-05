@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -18,13 +19,19 @@ def web_login(request):
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            try:
-                lecturer = user.lecturer
-                login(request, user)
-                messages.success(request, f'Welcome back, {user.first_name}!')
-                return redirect('attendance_web:dashboard')
-            except Lecturer.DoesNotExist:
-                messages.error(request, 'Only lecturers can access this system.')
+            login(request, user)
+            
+            # Check user role and redirect accordingly
+            if user.is_superuser:
+                messages.success(request, f'Welcome back, {user.first_name}! (Administrator)')
+                return redirect('attendance_web:admin_dashboard')
+            else:
+                try:
+                    lecturer = user.lecturer
+                    messages.success(request, f'Welcome back, {user.first_name}! (Lecturer)')
+                    return redirect('attendance_web:dashboard')
+                except Lecturer.DoesNotExist:
+                    messages.error(request, 'Access denied. User account not properly configured.')
         else:
             messages.error(request, 'Invalid username or password.')
     
@@ -239,3 +246,195 @@ def student_list(request):
     }
     
     return render(request, 'attendance/student_list.html', context)
+
+
+# Helper function to check if user is admin
+def is_admin(user):
+    return user.is_superuser
+
+
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    # Get system statistics
+    total_users = User.objects.count()
+    total_lecturers = Lecturer.objects.count()
+    total_students = Student.objects.filter(is_active=True).count()
+    total_courses = Course.objects.filter(is_active=True).count()
+    active_sessions = AttendanceSession.objects.filter(status='active').count()
+    
+    # Recent activities
+    recent_sessions = AttendanceSession.objects.all().order_by('-start_time')[:5]
+    recent_users = User.objects.all().order_by('-date_joined')[:5]
+    
+    context = {
+        'total_users': total_users,
+        'total_lecturers': total_lecturers,
+        'total_students': total_students,
+        'total_courses': total_courses,
+        'active_sessions': active_sessions,
+        'recent_sessions': recent_sessions,
+        'recent_users': recent_users,
+    }
+    
+    return render(request, 'attendance/admin_dashboard.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_lecturers(request):
+    lecturers = Lecturer.objects.select_related('user').order_by('lecturer_id')
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        lecturers = lecturers.filter(
+            Q(lecturer_id__icontains=search_query) |
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query) |
+            Q(user__email__icontains=search_query) |
+            Q(department__icontains=search_query)
+        )
+    
+    # Pagination
+    paginator = Paginator(lecturers, 15)
+    page_number = request.GET.get('page')
+    lecturers = paginator.get_page(page_number)
+    
+    context = {
+        'lecturers': lecturers,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'attendance/manage_lecturers.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def add_lecturer(request):
+    if request.method == 'POST':
+        # Get form data
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        lecturer_id = request.POST.get('lecturer_id')
+        department = request.POST.get('department')
+        
+        # Create user
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                password=password,
+                is_staff=True,
+                is_active=True
+            )
+            
+            # Create lecturer profile
+            Lecturer.objects.create(
+                user=user,
+                lecturer_id=lecturer_id,
+                department=department
+            )
+            
+            messages.success(request, f'Lecturer {first_name} {last_name} created successfully!')
+            return redirect('attendance_web:manage_lecturers')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating lecturer: {str(e)}')
+    
+    return render(request, 'attendance/add_lecturer.html')
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_students(request):
+    students = Student.objects.filter(is_active=True).order_by('student_id')
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        students = students.filter(
+            Q(student_id__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(program__icontains=search_query)
+        )
+    
+    # Pagination
+    paginator = Paginator(students, 20)
+    page_number = request.GET.get('page')
+    students = paginator.get_page(page_number)
+    
+    context = {
+        'students': students,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'attendance/manage_students.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def add_student(request):
+    if request.method == 'POST':
+        # Get form data
+        student_id = request.POST.get('student_id')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        program = request.POST.get('program')
+        year_of_study = request.POST.get('year_of_study')
+        
+        try:
+            # Create student
+            student = Student.objects.create(
+                student_id=student_id,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                program=program,
+                year_of_study=int(year_of_study),
+                is_active=True
+            )
+            
+            messages.success(request, f'Student {first_name} {last_name} created successfully!')
+            return redirect('attendance_web:manage_students')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating student: {str(e)}')
+    
+    return render(request, 'attendance/add_student.html')
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_courses(request):
+    courses = Course.objects.filter(is_active=True).select_related('lecturer').order_by('course_code')
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        courses = courses.filter(
+            Q(course_code__icontains=search_query) |
+            Q(course_name__icontains=search_query) |
+            Q(lecturer__user__first_name__icontains=search_query) |
+            Q(lecturer__user__last_name__icontains=search_query)
+        )
+    
+    # Pagination
+    paginator = Paginator(courses, 15)
+    page_number = request.GET.get('page')
+    courses = paginator.get_page(page_number)
+    
+    context = {
+        'courses': courses,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'attendance/manage_courses.html', context)

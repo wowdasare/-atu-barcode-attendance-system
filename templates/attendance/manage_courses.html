@@ -1,0 +1,116 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Manage Courses - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-book"></i> Manage Courses</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="#" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Course
+        </a>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="get" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search courses..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-outline-secondary">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Courses Table -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Lecturer</th>
+                        <th>Credits</th>
+                        <th>Students</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td><strong>{{ course.course_code }}</strong></td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.lecturer.user.first_name }} {{ course.lecturer.user.last_name }}</td>
+                        <td>{{ course.credits }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ course.students.count }}</span>
+                        </td>
+                        <td>
+                            {% if course.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-outline-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-info" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-success" title="Manage Students">
+                                    <i class="fas fa-users"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-danger" title="Deactivate">
+                                    <i class="fas fa-ban"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No courses found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if courses.has_other_pages %}
+            <nav aria-label="Courses pagination">
+                <ul class="pagination justify-content-center">
+                    {% if courses.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ courses.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">{{ courses.number }} of {{ courses.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if courses.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ courses.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ courses.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -53,9 +53,17 @@
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user"></i> {{ user.first_name }} {{ user.last_name }}
+                        {% if user.is_superuser %}
+                            <span class="badge bg-warning">Admin</span>
+                        {% else %}
+                            <span class="badge bg-info">Lecturer</span>
+                        {% endif %}
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/admin/"><i class="fas fa-cog"></i> Admin Panel</a></li>
+                        {% if user.is_superuser %}
+                            <li><a class="dropdown-item" href="{% url 'attendance_web:admin_dashboard' %}"><i class="fas fa-cog"></i> Admin Dashboard</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="/admin/"><i class="fas fa-tools"></i> Django Admin</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'attendance_web:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
@@ -72,22 +80,39 @@
             <div class="col-md-2 p-0">
                 <div class="sidebar">
                     <nav class="nav flex-column p-3">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'attendance_web:dashboard' %}">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                        <a class="nav-link {% if request.resolver_match.url_name == 'course-list' %}active{% endif %}" href="{% url 'attendance_web:course-list' %}">
-                            <i class="fas fa-book"></i> My Courses
-                        </a>
-                        <a class="nav-link {% if request.resolver_match.url_name == 'session-list' %}active{% endif %}" href="{% url 'attendance_web:session-list' %}">
-                            <i class="fas fa-calendar-check"></i> Attendance Sessions
-                        </a>
-                        <a class="nav-link {% if request.resolver_match.url_name == 'student-list' %}active{% endif %}" href="{% url 'attendance_web:student-list' %}">
-                            <i class="fas fa-users"></i> Students
-                        </a>
-                        <hr>
-                        <a class="nav-link" href="/admin/">
-                            <i class="fas fa-cog"></i> Admin Panel
-                        </a>
+                        {% if user.is_superuser %}
+                            <!-- Admin Navigation -->
+                            <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'attendance_web:admin_dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'manage_lecturers' %}active{% endif %}" href="{% url 'attendance_web:manage_lecturers' %}">
+                                <i class="fas fa-chalkboard-teacher"></i> Manage Lecturers
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'manage_students' %}active{% endif %}" href="{% url 'attendance_web:manage_students' %}">
+                                <i class="fas fa-user-graduate"></i> Manage Students
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'manage_courses' %}active{% endif %}" href="{% url 'attendance_web:manage_courses' %}">
+                                <i class="fas fa-book"></i> Manage Courses
+                            </a>
+                            <hr>
+                            <a class="nav-link" href="{% url 'attendance_web:dashboard' %}">
+                                <i class="fas fa-eye"></i> Lecturer View
+                            </a>
+                        {% else %}
+                            <!-- Lecturer Navigation -->
+                            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'attendance_web:dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'course-list' %}active{% endif %}" href="{% url 'attendance_web:course-list' %}">
+                                <i class="fas fa-book"></i> My Courses
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'session-list' %}active{% endif %}" href="{% url 'attendance_web:session-list' %}">
+                                <i class="fas fa-calendar-check"></i> Attendance Sessions
+                            </a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'student-list' %}active{% endif %}" href="{% url 'attendance_web:student-list' %}">
+                                <i class="fas fa-users"></i> Students
+                            </a>
+                        {% endif %}
                     </nav>
                 </div>
             </div>
