@@ -16,6 +16,9 @@ urlpatterns = [
     path('sessions/<str:session_id>/', web_views.session_detail, name='session-detail'),
     path('students/', web_views.student_list, name='student-list'),
     
+    # Debug route
+    path('admin/debug/', web_views.admin_debug, name='admin_debug'),
+    
     # Admin routes
     path('admin-dashboard/', web_views.admin_dashboard, name='admin_dashboard'),
     path('admin/lecturers/', web_views.manage_lecturers, name='manage_lecturers'),

@@ -250,7 +250,23 @@ def student_list(request):
 
 # Helper function to check if user is admin
 def is_admin(user):
+    print(f"[DEBUG] is_admin check for user: {user.username}, is_superuser: {user.is_superuser}")
     return user.is_superuser
+
+
+# Diagnostic view to check admin access
+@login_required
+def admin_debug(request):
+    """Debug view to check admin access"""
+    debug_info = {
+        'user': request.user.username,
+        'is_authenticated': request.user.is_authenticated,
+        'is_superuser': request.user.is_superuser,
+        'is_staff': request.user.is_staff,
+        'is_admin_result': is_admin(request.user),
+    }
+    
+    return render(request, 'attendance/admin_debug.html', {'debug_info': debug_info})
 
 
 @login_required

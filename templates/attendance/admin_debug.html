@@ -1,0 +1,68 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Admin Debug - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3>🔍 Admin Access Debug Information</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <td><strong>Username:</strong></td>
+                    <td>{{ debug_info.user }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Is Authenticated:</strong></td>
+                    <td>
+                        {% if debug_info.is_authenticated %}
+                            <span class="badge bg-success">✅ Yes</span>
+                        {% else %}
+                            <span class="badge bg-danger">❌ No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Is Superuser:</strong></td>
+                    <td>
+                        {% if debug_info.is_superuser %}
+                            <span class="badge bg-success">✅ Yes</span>
+                        {% else %}
+                            <span class="badge bg-danger">❌ No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Is Staff:</strong></td>
+                    <td>
+                        {% if debug_info.is_staff %}
+                            <span class="badge bg-success">✅ Yes</span>
+                        {% else %}
+                            <span class="badge bg-warning">⚠️ No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Admin Check Result:</strong></td>
+                    <td>
+                        {% if debug_info.is_admin_result %}
+                            <span class="badge bg-success">✅ ADMIN ACCESS GRANTED</span>
+                        {% else %}
+                            <span class="badge bg-danger">❌ ADMIN ACCESS DENIED</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="alert alert-info">
+                <h5>Test Links:</h5>
+                <a href="{% url 'attendance_web:admin_dashboard' %}" class="btn btn-primary me-2">Admin Dashboard</a>
+                <a href="{% url 'attendance_web:manage_lecturers' %}" class="btn btn-info me-2">Manage Lecturers</a>
+                <a href="{% url 'attendance_web:manage_courses' %}" class="btn btn-warning">Manage Courses</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
