@@ -1,0 +1,201 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}{{ course.course_code }} - ATU Attendance System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-book"></i> {{ course.course_code }} - {{ course.course_name }}</h2>
+    <div>
+        <a href="{% url 'attendance_web:course-list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Courses
+        </a>
+    </div>
+</div>
+
+<!-- Course Information -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5><i class="fas fa-info-circle"></i> Course Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Course Code:</strong> {{ course.course_code }}</p>
+                <p><strong>Course Name:</strong> {{ course.course_name }}</p>
+                <p><strong>Credit Hours:</strong> {{ course.credit_hours }}</p>
+                <p><strong>Semester:</strong> {{ course.semester }}</p>
+                <p><strong>Academic Year:</strong> {{ course.academic_year }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Lecturer:</strong> {{ course.lecturer.user.first_name }} {{ course.lecturer.user.last_name }}</p>
+                <p><strong>Department:</strong> {{ course.lecturer.department }}</p>
+                <p><strong>Enrolled Students:</strong> {{ course.students.count }}</p>
+                <p><strong>Total Sessions:</strong> {{ total_sessions }}</p>
+                <p><strong>Active Sessions:</strong> {{ active_sessions }}</p>
+            </div>
+        </div>
+        
+        {% if course.description %}
+        <div class="row mt-3">
+            <div class="col-12">
+                <p><strong>Description:</strong></p>
+                <p>{{ course.description }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h3>{{ course.students.count }}</h3>
+                <p class="mb-0">Enrolled Students</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h3>{{ total_sessions }}</h3>
+                <p class="mb-0">Total Sessions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h3>{{ active_sessions }}</h3>
+                <p class="mb-0">Active Sessions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h3>{{ avg_attendance|floatformat:1 }}%</h3>
+                <p class="mb-0">Avg Attendance</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Sessions -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5><i class="fas fa-calendar-check"></i> Recent Sessions</h5>
+        <a href="{% url 'attendance_web:session-list' %}?course={{ course.id }}" class="btn btn-sm btn-outline-primary">
+            View All Sessions
+        </a>
+    </div>
+    <div class="card-body">
+        {% if sessions %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Session Name</th>
+                        <th>Status</th>
+                        <th>Attendance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                    <tr>
+                        <td>{{ session.date|date:"M d, Y" }}<br><small class="text-muted">{{ session.start_time|time:"g:i A" }}</small></td>
+                        <td>
+                            <strong>{{ session.session_name|default:"Attendance Session" }}</strong>
+                            {% if session.location %}<br><small class="text-muted">{{ session.location }}</small>{% endif %}
+                        </td>
+                        <td>
+                            {% if session.status == 'active' %}
+                                <span class="badge bg-success">Active</span>
+                            {% elif session.status == 'ended' %}
+                                <span class="badge bg-secondary">Ended</span>
+                            {% else %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if session.status == 'ended' %}
+                                {{ session.present_students }}/{{ session.total_students }}
+                                <br><small class="text-muted">({{ session.attendance_rate|floatformat:1 }}%)</small>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'attendance_web:session-detail' session.session_id %}" class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <h6>No Sessions Yet</h6>
+            <p class="text-muted">No attendance sessions have been created for this course.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Enrolled Students -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5><i class="fas fa-users"></i> Enrolled Students</h5>
+        <a href="{% url 'attendance_web:student-list' %}?course={{ course.id }}" class="btn btn-sm btn-outline-primary">
+            View All Students
+        </a>
+    </div>
+    <div class="card-body">
+        {% if course.students.all %}
+        <div class="row">
+            {% for student in course.students.all|slice:":12" %}
+            <div class="col-md-4 col-lg-3 mb-2">
+                <div class="d-flex align-items-center">
+                    <div class="me-2">
+                        {% if student.barcode_image %}
+                            <img src="{{ student.barcode_image.url }}" alt="Barcode" style="width: 30px; height: 30px;">
+                        {% else %}
+                            <i class="fas fa-qrcode text-muted"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>{{ student.student_id }}</strong><br>
+                        <small>{{ student.first_name }} {{ student.last_name }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if course.students.count > 12 %}
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Showing 12 of {{ course.students.count }} students. 
+                <a href="{% url 'attendance_web:student-list' %}?course={{ course.id }}">View all students</a>
+            </small>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="text-center">
+            <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+            <h6>No Students Enrolled</h6>
+            <p class="text-muted">No students have been enrolled in this course yet.</p>
+            <a href="/admin/attendance/course/{{ course.id }}/change/" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i> Enroll Students
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
