@@ -67,7 +67,7 @@
                                 <a href="{% url 'attendance_web:edit_student' student.id %}" class="btn btn-outline-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="#" class="btn btn-outline-success" title="Generate Barcode">
+                                <a href="{% url 'attendance_web:generate_barcode' student.id %}" class="btn btn-outline-success" title="Generate Barcode">
                                     <i class="fas fa-qrcode"></i>
                                 </a>
                                 <a href="{% url 'attendance_web:toggle_student_status' student.id %}" 

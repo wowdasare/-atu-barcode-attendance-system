@@ -764,3 +764,19 @@ def toggle_lecturer_status(request, lecturer_id):
     status = "activated" if lecturer.user.is_active else "deactivated"
     messages.success(request, f'Lecturer {lecturer.user.first_name} {lecturer.user.last_name} {status} successfully!')
     return redirect('attendance_web:manage_lecturers')
+
+
+@login_required
+@user_passes_test(is_admin)
+def generate_student_barcode(request, student_id):
+    """Generate/regenerate barcode for a student"""
+    student = get_object_or_404(Student, id=student_id)
+    
+    try:
+        # Force barcode generation
+        student.generate_barcode()
+        messages.success(request, f'Barcode generated successfully for {student.first_name} {student.last_name}!')
+    except Exception as e:
+        messages.error(request, f'Error generating barcode: {str(e)}')
+    
+    return redirect('attendance_web:manage_students')
