@@ -102,6 +102,7 @@ class AttendanceSessionSerializer(serializers.ModelSerializer):
     lecturer = LecturerSerializer(read_only=True)
     duration = serializers.SerializerMethodField()
     attendance_summary = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
 
     class Meta:
         model = AttendanceSession
@@ -121,6 +122,9 @@ class AttendanceSessionSerializer(serializers.ModelSerializer):
             return f"{hours}h {minutes}m"
         return "0h 0m"
 
+    def get_date(self, obj):
+        return obj.date
+    
     def get_attendance_summary(self, obj):
         return {
             'total_students': obj.total_students,
