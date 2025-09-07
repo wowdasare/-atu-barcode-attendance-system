@@ -32,8 +32,8 @@ class Student(models.Model):
         if not self.barcode_id:
             self.barcode_id = str(uuid.uuid4())
         
-        # Only generate barcode if we don't have one and we're not loading fixtures
-        generate_barcode = not self.barcode_image and not kwargs.get('skip_barcode', False)
+        # Only generate barcode if we don't have one
+        generate_barcode = not self.barcode_image
         
         super().save(*args, **kwargs)
         
