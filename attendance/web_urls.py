@@ -43,4 +43,5 @@ urlpatterns = [
     path('system/lecturers/<int:lecturer_id>/toggle/', web_views.toggle_lecturer_status, name='toggle_lecturer_status'),
     path('system/students/<int:student_id>/barcode/', web_views.generate_student_barcode, name='generate_barcode'),
     path('system/students/<int:student_id>/show-barcode/', web_views.show_barcode, name='show_barcode'),
+    path('barcode/<int:student_id>.png', web_views.serve_barcode_image, name='serve_barcode'),
 ]

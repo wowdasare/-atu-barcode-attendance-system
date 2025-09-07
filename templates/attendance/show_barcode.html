@@ -14,28 +14,19 @@
                     <h5>{{ student.first_name }} {{ student.last_name }}</h5>
                     <p class="text-muted">{{ student.student_id }} - {{ student.program }}</p>
                     
-                    {% if student.barcode_image %}
-                        <div class="mb-3">
-                            <img src="{{ student.barcode_image.url }}" alt="Student Barcode" class="img-fluid" style="max-width: 300px;">
-                        </div>
-                        <p><strong>Barcode ID:</strong> <code>{{ student.barcode_id }}</code></p>
-                        
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ student.barcode_image.url }}" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-download"></i> Download Barcode
-                            </a>
-                            <a href="{% url 'attendance_web:generate_barcode' student.id %}" class="btn btn-secondary">
-                                <i class="fas fa-refresh"></i> Regenerate
-                            </a>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i> No barcode generated yet.
-                        </div>
-                        <a href="{% url 'attendance_web:generate_barcode' student.id %}" class="btn btn-primary">
-                            <i class="fas fa-qrcode"></i> Generate Barcode
+                    <div class="mb-3">
+                        <img src="{% url 'attendance_web:serve_barcode' student.id %}" alt="Student Barcode" class="img-fluid" style="max-width: 300px;">
+                    </div>
+                    <p><strong>Barcode ID:</strong> <code>{{ student.barcode_id }}</code></p>
+                    
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'attendance_web:serve_barcode' student.id %}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download Barcode
                         </a>
-                    {% endif %}
+                        <a href="{% url 'attendance_web:generate_barcode' student.id %}" class="btn btn-secondary">
+                            <i class="fas fa-refresh"></i> Regenerate
+                        </a>
+                    </div>
                 </div>
                 <div class="card-footer text-center">
                     <a href="{% url 'attendance_web:manage_students' %}" class="btn btn-outline-secondary">
