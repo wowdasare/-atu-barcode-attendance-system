@@ -796,3 +796,16 @@ def generate_student_barcode(request, student_id):
         messages.error(request, f'Error generating barcode: {str(e)}')
     
     return redirect('attendance_web:manage_students')
+
+
+@login_required
+@user_passes_test(is_admin)
+def show_barcode(request, student_id):
+    """Display student barcode"""
+    student = get_object_or_404(Student, id=student_id)
+    
+    context = {
+        'student': student,
+    }
+    
+    return render(request, 'attendance/show_barcode.html', context)
