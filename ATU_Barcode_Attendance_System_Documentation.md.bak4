@@ -358,64 +358,64 @@ The system uses a relational database design with the following core entities:
 
 ## 4. Features and Functionality
 
-### 4.1 Core Features
+### 3.1 Core Features
 
-#### 4.1.1 User Management
+#### 3.1.1 User Management
 - Admin Dashboard:: Comprehensive system administration
 - User Authentication:: Secure login/logout functionality
 - Role-based Access:: Different permission levels for admins and lecturers
 - Profile Management:: User profile updates and management
 
-#### 4.1.2 Student Management
+#### 3.1.2 Student Management
 - Student Registration:: Add new students with comprehensive details
 - Profile Management:: Edit student information and status
 - QR Code Generation:: Automatic unique QR code creation for each student
 - Bulk Import/Export:: CSV import/export functionality
 - Status Management:: Activate/deactivate student accounts
 
-#### 4.1.3 Lecturer Management
+#### 3.1.3 Lecturer Management
 - Lecturer Profiles:: Comprehensive lecturer information management
 - Department Assignment:: Associate lecturers with departments
 - Course Assignment:: Link lecturers to their respective courses
 - Access Control:: Manage lecturer permissions and access levels
 
-#### 4.1.4 Course Management
+#### 3.1.4 Course Management
 - Course Creation:: Set up courses with detailed information
 - Student Enrollment:: Manage student-course relationships
 - Semester Management:: Organize courses by academic terms
 - Course Analytics:: Track course attendance statistics
 
-#### 4.1.5 Attendance System
+#### 3.1.5 Attendance System
 - Session Creation:: Start attendance sessions for specific courses
 - QR Code Display:: Show unique QR codes for attendance marking
 - Real-time Tracking:: Live attendance status updates
 - Session Management:: End sessions and generate reports
 - Late Arrival Detection:: Automatic identification of late students
 
-#### 4.1.6 Reporting and Analytics
+#### 3.1.6 Reporting and Analytics
 - Attendance Reports:: Comprehensive attendance statistics
 - Export Functionality:: CSV export for external analysis
 - Visual Dashboard:: Graphical representation of attendance data
 - Historical Data:: Access to past attendance records
 - Custom Date Ranges:: Filter reports by specific time periods
 
-### 4.2 Advanced Features
+### 3.2 Advanced Features
 
-#### 4.2.1 Modern UI/UX
+#### 3.2.1 Modern UI/UX
 - Responsive Design:: Mobile-friendly interface
 - Modern Aesthetics:: Clean, professional design
 - Intuitive Navigation:: User-friendly menu system
 - Real-time Updates:: Dynamic content updates
 - Progressive Web App:: App-like experience
 
-#### 4.2.2 Security Features
+#### 3.2.2 Security Features
 - Secure Authentication:: Django's built-in security
 - CSRF Protection:: Cross-site request forgery protection
 - SQL Injection Prevention:: Parameterized queries
 - Session Management:: Secure session handling
 - Access Control:: Role-based permissions
 
-#### 4.2.3 Performance Optimization
+#### 3.2.3 Performance Optimization
 - Database Indexing:: Optimized query performance
 - Caching:: Static file caching
 - Compression:: Gzipped content delivery
@@ -425,34 +425,34 @@ The system uses a relational database design with the following core entities:
 
 ## 5. Technology Stack
 
-### 5.1 Backend Technologies
+### 4.1 Backend Technologies
 - Framework:: Django 4.2+ (Python web framework)
 - API Framework:: Django REST Framework 3.14+
 - Database:: PostgreSQL (Production), SQLite (Development)
 - Authentication:: Django's built-in authentication system
 - ORM:: Django ORM for database operations
 
-### 5.2 Frontend Technologies
+### 4.2 Frontend Technologies
 - Template Engine:: Django Templates
 - CSS Framework:: Bootstrap 5.1.3
 - Icons:: Font Awesome 6.0
 - Typography:: Google Fonts (Inter)
 - JavaScript:: Vanilla JavaScript with Bootstrap JS
 
-### 5.3 Third-Party Libraries
+### 4.3 Third-Party Libraries
 - QR Code Generation:: python-qrcode[pil] 7.4+
 - Image Processing:: Pillow 10.0+
 - Database URL Parsing:: dj-database-url 2.1+
 - CORS Handling:: django-cors-headers 4.0+
 - Static Files:: WhiteNoise 6.0+
 
-### 5.4 Development Tools
+### 4.4 Development Tools
 - Version Control:: Git with GitHub
 - IDE:: Visual Studio Code / PyCharm
 - Package Management:: pip with requirements.txt
 - Environment Management:: Python virtual environments
 
-### 5.5 Deployment Stack
+### 4.5 Deployment Stack
 - Hosting Platform:: Railway
 - Web Server:: Gunicorn 21.0+
 - Database:: Railway PostgreSQL
@@ -463,13 +463,13 @@ The system uses a relational database design with the following core entities:
 
 ## 6. Installation Guide
 
-### 6.1 Prerequisites
+### 5.1 Prerequisites
 - Python 3.8 or higher
 - Git for version control
 - Modern web browser
 - Code editor (VS Code recommended)
 
-### 6.2 Local Development Setup
+### 5.2 Local Development Setup
 
 #### Step 1: Clone Repository
 ```bash
@@ -529,7 +529,7 @@ python manage.py runserver
 
 Visit `http://localhost:8000` to access the application.
 
-### 6.3 Production Deployment
+### 5.3 Production Deployment
 
 #### Railway Deployment
 1. Connect Repository:: Link GitHub repository to Railway
