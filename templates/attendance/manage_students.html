@@ -93,12 +93,14 @@
                 </div>
 
                 <!-- QR Code Preview -->
-                {% if student.barcode_image %}
+                {% if student.barcode_id %}
                 <div class="text-center mb-4">
                     <div class="p-3 bg-light rounded-3 d-inline-block">
-                        <img src="{{ student.barcode_image.url }}" class="barcode-img" 
+                        <img src="{% url 'attendance_web:serve_barcode' student.id %}" class="barcode-img" 
                              style="max-width: 60px; max-height: 60px;" 
-                             alt="QR Code for {{ student.student_id }}">
+                             alt="QR Code for {{ student.student_id }}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <i class="fas fa-qrcode text-muted fs-2" style="display: none;"></i>
                     </div>
                     <div class="mt-2">
                         <small class="text-success"><i class="fas fa-check-circle me-1"></i>QR Code Ready</small>
