@@ -179,22 +179,18 @@ def parse_markdown_to_docx(doc, markdown_file):
             
             # Process inline formatting
             text = line
-            if '**' in text:
-                parts = text.split('**')
-                for i, part in enumerate(parts):
-                    if i % 2 == 0:
-                        para.add_run(part)
-                    else:
-                        run = para.add_run(part)
-                        run.bold = True
-            elif '*' in text and not text.startswith('*'):
-                parts = text.split('*')
-                for i, part in enumerate(parts):
-                    if i % 2 == 0:
-                        para.add_run(part)
-                    else:
-                        run = para.add_run(part)
-                        run.italic = True
+            
+            # Handle text with colon-based formatting (e.g., "Feature Name: Description")
+            if '::' in text:
+                parts = text.split('::', 1)
+                if len(parts) == 2:
+                    # Bold the part before ::, normal the part after
+                    title_run = para.add_run(parts[0] + ':')
+                    title_run.bold = True
+                    title_run.font.color.rgb = RGBColor(37, 99, 235)
+                    para.add_run(' ' + parts[1])
+                else:
+                    para.add_run(text)
             elif '`' in text:
                 parts = text.split('`')
                 for i, part in enumerate(parts):

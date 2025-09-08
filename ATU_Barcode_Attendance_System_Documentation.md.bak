@@ -62,20 +62,20 @@ The ATU Barcode Student Attendance System is a modern web-based application desi
 ```
 
 ### 2.2 Component Architecture
-- Presentation Layer:: HTML templates with Bootstrap 5 and custom CSS
-- Business Logic Layer:: Django views and models
-- Data Access Layer:: Django ORM with PostgreSQL
-- Authentication Layer:: Django's built-in authentication system
-- API Layer:: Django REST Framework for mobile integration
+- **Presentation Layer**: HTML templates with Bootstrap 5 and custom CSS
+- **Business Logic Layer**: Django views and models
+- **Data Access Layer**: Django ORM with PostgreSQL
+- **Authentication Layer**: Django's built-in authentication system
+- **API Layer**: Django REST Framework for mobile integration
 
 ### 2.3 Database Design
 The system uses a relational database design with the following core entities:
-- Users:: System authentication and authorization
-- Lecturers:: Faculty member profiles and department information
-- Students:: Student profiles with unique QR codes
-- Courses:: Course information and enrollment management
-- Attendance Sessions:: Individual attendance tracking sessions
-- Attendance Records:: Individual student attendance entries
+- **Users**: System authentication and authorization
+- **Lecturers**: Faculty member profiles and department information
+- **Students**: Student profiles with unique QR codes
+- **Courses**: Course information and enrollment management
+- **Attendance Sessions**: Individual attendance tracking sessions
+- **Attendance Records**: Individual student attendance entries
 
 ---
 
@@ -84,103 +84,103 @@ The system uses a relational database design with the following core entities:
 ### 3.1 Core Features
 
 #### 3.1.1 User Management
-- Admin Dashboard:: Comprehensive system administration
-- User Authentication:: Secure login/logout functionality
-- Role-based Access:: Different permission levels for admins and lecturers
-- Profile Management:: User profile updates and management
+- **Admin Dashboard**: Comprehensive system administration
+- **User Authentication**: Secure login/logout functionality
+- **Role-based Access**: Different permission levels for admins and lecturers
+- **Profile Management**: User profile updates and management
 
 #### 3.1.2 Student Management
-- Student Registration:: Add new students with comprehensive details
-- Profile Management:: Edit student information and status
-- QR Code Generation:: Automatic unique QR code creation for each student
-- Bulk Import/Export:: CSV import/export functionality
-- Status Management:: Activate/deactivate student accounts
+- **Student Registration**: Add new students with comprehensive details
+- **Profile Management**: Edit student information and status
+- **QR Code Generation**: Automatic unique QR code creation for each student
+- **Bulk Import/Export**: CSV import/export functionality
+- **Status Management**: Activate/deactivate student accounts
 
 #### 3.1.3 Lecturer Management
-- Lecturer Profiles:: Comprehensive lecturer information management
-- Department Assignment:: Associate lecturers with departments
-- Course Assignment:: Link lecturers to their respective courses
-- Access Control:: Manage lecturer permissions and access levels
+- **Lecturer Profiles**: Comprehensive lecturer information management
+- **Department Assignment**: Associate lecturers with departments
+- **Course Assignment**: Link lecturers to their respective courses
+- **Access Control**: Manage lecturer permissions and access levels
 
 #### 3.1.4 Course Management
-- Course Creation:: Set up courses with detailed information
-- Student Enrollment:: Manage student-course relationships
-- Semester Management:: Organize courses by academic terms
-- Course Analytics:: Track course attendance statistics
+- **Course Creation**: Set up courses with detailed information
+- **Student Enrollment**: Manage student-course relationships
+- **Semester Management**: Organize courses by academic terms
+- **Course Analytics**: Track course attendance statistics
 
 #### 3.1.5 Attendance System
-- Session Creation:: Start attendance sessions for specific courses
-- QR Code Display:: Show unique QR codes for attendance marking
-- Real-time Tracking:: Live attendance status updates
-- Session Management:: End sessions and generate reports
-- Late Arrival Detection:: Automatic identification of late students
+- **Session Creation**: Start attendance sessions for specific courses
+- **QR Code Display**: Show unique QR codes for attendance marking
+- **Real-time Tracking**: Live attendance status updates
+- **Session Management**: End sessions and generate reports
+- **Late Arrival Detection**: Automatic identification of late students
 
 #### 3.1.6 Reporting and Analytics
-- Attendance Reports:: Comprehensive attendance statistics
-- Export Functionality:: CSV export for external analysis
-- Visual Dashboard:: Graphical representation of attendance data
-- Historical Data:: Access to past attendance records
-- Custom Date Ranges:: Filter reports by specific time periods
+- **Attendance Reports**: Comprehensive attendance statistics
+- **Export Functionality**: CSV export for external analysis
+- **Visual Dashboard**: Graphical representation of attendance data
+- **Historical Data**: Access to past attendance records
+- **Custom Date Ranges**: Filter reports by specific time periods
 
 ### 3.2 Advanced Features
 
 #### 3.2.1 Modern UI/UX
-- Responsive Design:: Mobile-friendly interface
-- Modern Aesthetics:: Clean, professional design
-- Intuitive Navigation:: User-friendly menu system
-- Real-time Updates:: Dynamic content updates
-- Progressive Web App:: App-like experience
+- **Responsive Design**: Mobile-friendly interface
+- **Modern Aesthetics**: Clean, professional design
+- **Intuitive Navigation**: User-friendly menu system
+- **Real-time Updates**: Dynamic content updates
+- **Progressive Web App**: App-like experience
 
 #### 3.2.2 Security Features
-- Secure Authentication:: Django's built-in security
-- CSRF Protection:: Cross-site request forgery protection
-- SQL Injection Prevention:: Parameterized queries
-- Session Management:: Secure session handling
-- Access Control:: Role-based permissions
+- **Secure Authentication**: Django's built-in security
+- **CSRF Protection**: Cross-site request forgery protection
+- **SQL Injection Prevention**: Parameterized queries
+- **Session Management**: Secure session handling
+- **Access Control**: Role-based permissions
 
 #### 3.2.3 Performance Optimization
-- Database Indexing:: Optimized query performance
-- Caching:: Static file caching
-- Compression:: Gzipped content delivery
-- CDN Integration:: Content delivery network support
+- **Database Indexing**: Optimized query performance
+- **Caching**: Static file caching
+- **Compression**: Gzipped content delivery
+- **CDN Integration**: Content delivery network support
 
 ---
 
 ## 4. Technology Stack
 
 ### 4.1 Backend Technologies
-- Framework:: Django 4.2+ (Python web framework)
-- API Framework:: Django REST Framework 3.14+
-- Database:: PostgreSQL (Production), SQLite (Development)
-- Authentication:: Django's built-in authentication system
-- ORM:: Django ORM for database operations
+- **Framework**: Django 4.2+ (Python web framework)
+- **API Framework**: Django REST Framework 3.14+
+- **Database**: PostgreSQL (Production), SQLite (Development)
+- **Authentication**: Django's built-in authentication system
+- **ORM**: Django ORM for database operations
 
 ### 4.2 Frontend Technologies
-- Template Engine:: Django Templates
-- CSS Framework:: Bootstrap 5.1.3
-- Icons:: Font Awesome 6.0
-- Typography:: Google Fonts (Inter)
-- JavaScript:: Vanilla JavaScript with Bootstrap JS
+- **Template Engine**: Django Templates
+- **CSS Framework**: Bootstrap 5.1.3
+- **Icons**: Font Awesome 6.0
+- **Typography**: Google Fonts (Inter)
+- **JavaScript**: Vanilla JavaScript with Bootstrap JS
 
 ### 4.3 Third-Party Libraries
-- QR Code Generation:: python-qrcode[pil] 7.4+
-- Image Processing:: Pillow 10.0+
-- Database URL Parsing:: dj-database-url 2.1+
-- CORS Handling:: django-cors-headers 4.0+
-- Static Files:: WhiteNoise 6.0+
+- **QR Code Generation**: python-qrcode[pil] 7.4+
+- **Image Processing**: Pillow 10.0+
+- **Database URL Parsing**: dj-database-url 2.1+
+- **CORS Handling**: django-cors-headers 4.0+
+- **Static Files**: WhiteNoise 6.0+
 
 ### 4.4 Development Tools
-- Version Control:: Git with GitHub
-- IDE:: Visual Studio Code / PyCharm
-- Package Management:: pip with requirements.txt
-- Environment Management:: Python virtual environments
+- **Version Control**: Git with GitHub
+- **IDE**: Visual Studio Code / PyCharm
+- **Package Management**: pip with requirements.txt
+- **Environment Management**: Python virtual environments
 
 ### 4.5 Deployment Stack
-- Hosting Platform:: Railway
-- Web Server:: Gunicorn 21.0+
-- Database:: Railway PostgreSQL
-- Static Files:: WhiteNoise middleware
-- Domain:: Custom domain support
+- **Hosting Platform**: Railway
+- **Web Server**: Gunicorn 21.0+
+- **Database**: Railway PostgreSQL
+- **Static Files**: WhiteNoise middleware
+- **Domain**: Custom domain support
 
 ---
 
@@ -255,10 +255,10 @@ Visit `http://localhost:8000` to access the application.
 ### 5.3 Production Deployment
 
 #### Railway Deployment
-1. Connect Repository:: Link GitHub repository to Railway
-2. Environment Variables:: Set production environment variables
-3. Database:: Configure Railway PostgreSQL
-4. Deploy:: Railway automatically deploys on git push
+1. **Connect Repository**: Link GitHub repository to Railway
+2. **Environment Variables**: Set production environment variables
+3. **Database**: Configure Railway PostgreSQL
+4. **Deploy**: Railway automatically deploys on git push
 
 #### Environment Variables for Production
 ```bash
@@ -275,76 +275,76 @@ RAILWAY_ENVIRONMENT=production
 ### 6.1 System Administrator Guide
 
 #### 6.1.1 Initial System Setup
-1. Access Admin Dashboard:: Login with admin credentials
-2. Configure System Settings:: Set up basic system parameters
-3. Create Lecturer Accounts:: Add faculty members to the system
-4. Set Up Departments:: Configure academic departments
+1. **Access Admin Dashboard**: Login with admin credentials
+2. **Configure System Settings**: Set up basic system parameters
+3. **Create Lecturer Accounts**: Add faculty members to the system
+4. **Set Up Departments**: Configure academic departments
 
 #### 6.1.2 User Management
-1. Adding Lecturers::
+1. **Adding Lecturers**:
    - Navigate to "System" → "Manage Lecturers"
    - Click "Add New Lecturer"
    - Fill in lecturer details and department
    - Save to create account
 
-2. Managing Students::
+2. **Managing Students**:
    - Go to "System" → "Manage Students"
    - Click "Add New Student" for individual addition
    - Use CSV import for bulk student addition
    - Generate QR codes for new students
 
-3. Course Management::
+3. **Course Management**:
    - Access "System" → "Manage Courses"
    - Create new courses with details
    - Assign lecturers to courses
    - Enroll students in appropriate courses
 
 #### 6.1.3 System Maintenance
-1. Regular Backups:: Export data regularly
-2. User Account Management:: Monitor and maintain user accounts
-3. System Updates:: Keep system updated with latest features
-4. Performance Monitoring:: Monitor system performance and usage
+1. **Regular Backups**: Export data regularly
+2. **User Account Management**: Monitor and maintain user accounts
+3. **System Updates**: Keep system updated with latest features
+4. **Performance Monitoring**: Monitor system performance and usage
 
 ### 6.2 Lecturer Guide
 
 #### 6.2.1 Dashboard Overview
-- Course Statistics:: View enrolled student counts
-- Active Sessions:: Monitor ongoing attendance sessions
-- Quick Actions:: Access frequently used features
-- Recent Activity:: View recent attendance sessions
+- **Course Statistics**: View enrolled student counts
+- **Active Sessions**: Monitor ongoing attendance sessions
+- **Quick Actions**: Access frequently used features
+- **Recent Activity**: View recent attendance sessions
 
 #### 6.2.2 Managing Attendance Sessions
 
-1. Starting a Session::
+1. **Starting a Session**:
    - Navigate to "Attendance Sessions"
    - Click "Start New Session"
    - Select course and provide session details
    - Display QR codes for student scanning
 
-2. Monitoring Attendance::
+2. **Monitoring Attendance**:
    - View real-time attendance updates
    - Check student check-in times
    - Identify late arrivals
    - Add manual attendance entries if needed
 
-3. Ending Sessions::
+3. **Ending Sessions**:
    - Click "End Session" when complete
    - Review final attendance statistics
    - Generate attendance reports
 
 #### 6.2.3 Viewing Reports
-1. Course Reports:: Access detailed course attendance statistics
-2. Student Progress:: Track individual student attendance patterns
-3. Export Data:: Download attendance data in CSV format
-4. Historical Analysis:: Review past attendance trends
+1. **Course Reports**: Access detailed course attendance statistics
+2. **Student Progress**: Track individual student attendance patterns
+3. **Export Data**: Download attendance data in CSV format
+4. **Historical Analysis**: Review past attendance trends
 
 ### 6.3 Student Guide (Future Enhancement)
 
 #### 6.3.1 QR Code Usage
-1. Obtain QR Code:: Get unique QR code from lecturer or admin
-2. Session Participation:: Scan QR code during attendance sessions
-3. Verification:: Confirm successful attendance marking
-4. Issue Reporting:: Report any attendance discrepancies
+1. **Obtain QR Code**: Get unique QR code from lecturer or admin
+2. **Session Participation**: Scan QR code during attendance sessions
+3. **Verification**: Confirm successful attendance marking
+4. **Issue Reporting**: Report any attendance discrepancies
 
 ---
 
@@ -573,28 +573,28 @@ CREATE INDEX idx_course_lecturer ON attendance_course(lecturer_id);
 ## 9. Security Features
 
 ### 9.1 Authentication and Authorization
-- Django Authentication:: Secure user login system
-- Role-based Access Control:: Different permissions for admins and lecturers
-- Session Management:: Secure session handling
-- Password Security:: Hashed password storage
+- **Django Authentication**: Secure user login system
+- **Role-based Access Control**: Different permissions for admins and lecturers
+- **Session Management**: Secure session handling
+- **Password Security**: Hashed password storage
 
 ### 9.2 Data Protection
-- CSRF Protection:: Cross-site request forgery prevention
-- SQL Injection Prevention:: Parameterized queries through Django ORM
-- XSS Protection:: Input sanitization and output encoding
-- Secure Headers:: Security-related HTTP headers
+- **CSRF Protection**: Cross-site request forgery prevention
+- **SQL Injection Prevention**: Parameterized queries through Django ORM
+- **XSS Protection**: Input sanitization and output encoding
+- **Secure Headers**: Security-related HTTP headers
 
 ### 9.3 Infrastructure Security
-- HTTPS Enforcement:: SSL/TLS encryption in production
-- Secure Cookies:: HTTPOnly and Secure cookie flags
-- Environment Variables:: Sensitive data stored in environment variables
-- Database Security:: Connection encryption and access controls
+- **HTTPS Enforcement**: SSL/TLS encryption in production
+- **Secure Cookies**: HTTPOnly and Secure cookie flags
+- **Environment Variables**: Sensitive data stored in environment variables
+- **Database Security**: Connection encryption and access controls
 
 ### 9.4 QR Code Security
-- Unique Identifiers:: UUID-based QR code generation
-- Time-based Sessions:: Limited-time attendance sessions
-- Tampering Prevention:: Digital signatures for QR codes
-- Access Logging:: Audit trail for all attendance activities
+- **Unique Identifiers**: UUID-based QR code generation
+- **Time-based Sessions**: Limited-time attendance sessions
+- **Tampering Prevention**: Digital signatures for QR codes
+- **Access Logging**: Audit trail for all attendance activities
 
 ---
 
@@ -609,31 +609,31 @@ CREATE INDEX idx_course_lecturer ON attendance_course(lecturer_id);
 
 #### 10.1.2 Deployment Steps
 
-1. Connect Repository::
+1. **Connect Repository**:
    - Login to Railway dashboard
    - Create new project
    - Connect GitHub repository
 
-2. Configure Environment Variables::
+2. **Configure Environment Variables**:
    ```bash
    DEBUG=False
    SECRET_KEY=your-production-secret-key
    RAILWAY_ENVIRONMENT=production
    ```
 
-3. Database Setup::
+3. **Database Setup**:
    - Add PostgreSQL service in Railway
    - Railway automatically provides DATABASE_URL
 
-4. Deploy::
+4. **Deploy**:
    - Railway automatically deploys on git push
    - Monitor deployment logs for any issues
 
 #### 10.1.3 Post-Deployment
-1. Create Admin User:: Railway runs create_admin command automatically
-2. Test Functionality:: Verify all features work correctly
-3. Configure Domain:: Set up custom domain if needed
-4. Monitor Performance:: Check application performance and errors
+1. **Create Admin User**: Railway runs create_admin command automatically
+2. **Test Functionality**: Verify all features work correctly
+3. **Configure Domain**: Set up custom domain if needed
+4. **Monitor Performance**: Check application performance and errors
 
 ### 10.2 Alternative Deployment Options
 
@@ -670,16 +670,16 @@ databases:
 ### 10.3 Monitoring and Maintenance
 
 #### 10.3.1 Application Monitoring
-- Error Tracking:: Monitor application errors
-- Performance Metrics:: Track response times and throughput
-- Uptime Monitoring:: Ensure high availability
-- Database Performance:: Monitor query performance
+- **Error Tracking**: Monitor application errors
+- **Performance Metrics**: Track response times and throughput
+- **Uptime Monitoring**: Ensure high availability
+- **Database Performance**: Monitor query performance
 
 #### 10.3.2 Regular Maintenance
-- Security Updates:: Keep dependencies updated
-- Database Backups:: Regular automated backups
-- Log Management:: Monitor and rotate application logs
-- Capacity Planning:: Monitor resource usage and scale as needed
+- **Security Updates**: Keep dependencies updated
+- **Database Backups**: Regular automated backups
+- **Log Management**: Monitor and rotate application logs
+- **Capacity Planning**: Monitor resource usage and scale as needed
 
 ---
 
@@ -688,8 +688,8 @@ databases:
 ### 11.1 Common Issues and Solutions
 
 #### 11.1.1 Database Connection Issues
-Problem:: Database connection errors
-Solution::
+**Problem**: Database connection errors
+**Solution**:
 ```bash
 # Check DATABASE_URL environment variable
 echo $DATABASE_URL
@@ -702,8 +702,8 @@ python manage.py migrate
 ```
 
 #### 11.1.2 QR Code Generation Issues
-Problem:: QR codes not displaying
-Solution::
+**Problem**: QR codes not displaying
+**Solution**:
 ```python
 # Check QR code dependencies
 pip install qrcode[pil] Pillow
@@ -717,8 +717,8 @@ chmod 755 media/barcodes/
 ```
 
 #### 11.1.3 Authentication Problems
-Problem:: Users cannot login
-Solution::
+**Problem**: Users cannot login
+**Solution**:
 ```bash
 # Create admin user
 python manage.py create_admin
@@ -735,8 +735,8 @@ python manage.py shell
 ```
 
 #### 11.1.4 Static Files Issues
-Problem:: CSS/JS files not loading
-Solution::
+**Problem**: CSS/JS files not loading
+**Solution**:
 ```bash
 # Collect static files
 python manage.py collectstatic --clear
@@ -840,89 +840,89 @@ def health_check(request):
 ### 12.1 Short-term Enhancements (Next 3-6 months)
 
 #### 12.1.1 Mobile Application
-- Native Mobile App:: Develop iOS and Android applications
-- QR Code Scanner:: Built-in scanner for students
-- Push Notifications:: Real-time attendance notifications
-- Offline Mode:: Limited functionality without internet connection
+- **Native Mobile App**: Develop iOS and Android applications
+- **QR Code Scanner**: Built-in scanner for students
+- **Push Notifications**: Real-time attendance notifications
+- **Offline Mode**: Limited functionality without internet connection
 
 #### 12.1.2 Advanced Reporting
-- Visual Analytics:: Charts and graphs for attendance trends
-- Predictive Analytics:: Identify students at risk of poor attendance
-- Custom Reports:: User-defined report parameters
-- Automated Reports:: Scheduled report generation and distribution
+- **Visual Analytics**: Charts and graphs for attendance trends
+- **Predictive Analytics**: Identify students at risk of poor attendance
+- **Custom Reports**: User-defined report parameters
+- **Automated Reports**: Scheduled report generation and distribution
 
 #### 12.1.3 Integration Features
-- SMS Notifications:: Automatic SMS alerts for attendance
-- Email Integration:: Email reports and notifications
-- Academic System Integration:: Connect with existing student information systems
-- Calendar Integration:: Sync with institutional calendars
+- **SMS Notifications**: Automatic SMS alerts for attendance
+- **Email Integration**: Email reports and notifications
+- **Academic System Integration**: Connect with existing student information systems
+- **Calendar Integration**: Sync with institutional calendars
 
 ### 12.2 Medium-term Enhancements (6-12 months)
 
 #### 12.2.1 Advanced Analytics
-- Machine Learning:: Attendance pattern analysis
-- Risk Assessment:: Early warning systems for academic performance
-- Behavioral Analytics:: Student engagement metrics
-- Institutional Dashboard:: University-wide attendance overview
+- **Machine Learning**: Attendance pattern analysis
+- **Risk Assessment**: Early warning systems for academic performance
+- **Behavioral Analytics**: Student engagement metrics
+- **Institutional Dashboard**: University-wide attendance overview
 
 #### 12.2.2 Enhanced Security
-- Two-Factor Authentication:: Additional security layer
-- Biometric Integration:: Fingerprint or face recognition
-- Fraud Detection:: Identify proxy attendance attempts
-- Audit Trails:: Comprehensive activity logging
+- **Two-Factor Authentication**: Additional security layer
+- **Biometric Integration**: Fingerprint or face recognition
+- **Fraud Detection**: Identify proxy attendance attempts
+- **Audit Trails**: Comprehensive activity logging
 
 #### 12.2.3 Scalability Improvements
-- Microservices Architecture:: Break down monolithic structure
-- API Gateway:: Centralized API management
-- Load Balancing:: Distribute traffic across multiple servers
-- Caching Layer:: Redis or Memcached implementation
+- **Microservices Architecture**: Break down monolithic structure
+- **API Gateway**: Centralized API management
+- **Load Balancing**: Distribute traffic across multiple servers
+- **Caching Layer**: Redis or Memcached implementation
 
 ### 12.3 Long-term Vision (12+ months)
 
 #### 12.3.1 AI-Powered Features
-- Facial Recognition:: Camera-based attendance marking
-- Natural Language Processing:: Voice-activated commands
-- Intelligent Scheduling:: AI-optimized class scheduling
-- Personalized Insights:: Individual student recommendations
+- **Facial Recognition**: Camera-based attendance marking
+- **Natural Language Processing**: Voice-activated commands
+- **Intelligent Scheduling**: AI-optimized class scheduling
+- **Personalized Insights**: Individual student recommendations
 
 #### 12.3.2 IoT Integration
-- Smart Classroom:: IoT sensors for automatic attendance
-- RFID Integration:: Alternative to QR codes
-- Beacon Technology:: Proximity-based attendance
-- Environmental Monitoring:: Classroom conditions tracking
+- **Smart Classroom**: IoT sensors for automatic attendance
+- **RFID Integration**: Alternative to QR codes
+- **Beacon Technology**: Proximity-based attendance
+- **Environmental Monitoring**: Classroom conditions tracking
 
 #### 12.3.3 Blockchain Integration
-- Immutable Records:: Blockchain-based attendance storage
-- Smart Contracts:: Automated attendance policies
-- Credential Verification:: Blockchain-based certificates
-- Decentralized Identity:: Student identity management
+- **Immutable Records**: Blockchain-based attendance storage
+- **Smart Contracts**: Automated attendance policies
+- **Credential Verification**: Blockchain-based certificates
+- **Decentralized Identity**: Student identity management
 
 ---
 
 ## 13. Technical Support and Contact Information
 
 ### 13.1 Development Team
-- Lead Developer:: [Your Name]
-- Email:: [your.email@domain.com]
-- GitHub:: https://github.com/wowdasare/atu-barcode-attendance-system
+- **Lead Developer**: [Your Name]
+- **Email**: [your.email@domain.com]
+- **GitHub**: https://github.com/wowdasare/atu-barcode-attendance-system
 
 ### 13.2 Support Resources
-- Documentation:: This document and inline code comments
-- Issue Tracking:: GitHub Issues for bug reports and feature requests
-- Wiki:: GitHub Wiki for additional documentation
-- Video Tutorials:: YouTube channel with how-to videos
+- **Documentation**: This document and inline code comments
+- **Issue Tracking**: GitHub Issues for bug reports and feature requests
+- **Wiki**: GitHub Wiki for additional documentation
+- **Video Tutorials**: YouTube channel with how-to videos
 
 ### 13.3 License and Legal
-- License:: MIT License (see LICENSE file)
-- Privacy Policy:: Data protection and privacy guidelines
-- Terms of Service:: Usage terms and conditions
-- Compliance:: GDPR and institutional privacy requirements
+- **License**: MIT License (see LICENSE file)
+- **Privacy Policy**: Data protection and privacy guidelines
+- **Terms of Service**: Usage terms and conditions
+- **Compliance**: GDPR and institutional privacy requirements
 
 ### 13.4 Acknowledgments
-- Django Framework:: Web development framework
-- Bootstrap:: Frontend framework
-- Railway:: Deployment platform
-- Accra Technical University:: Project sponsoring institution
+- **Django Framework**: Web development framework
+- **Bootstrap**: Frontend framework
+- **Railway**: Deployment platform
+- **Accra Technical University**: Project sponsoring institution
 
 ---
 
@@ -970,10 +970,10 @@ def health_check(request):
 
 ---
 
-Document Version:: 1.0  
-Last Updated:: [Current Date]  
-Author:: [Your Name]  
-Status:: Final
+**Document Version**: 1.0  
+**Last Updated**: [Current Date]  
+**Author**: [Your Name]  
+**Status**: Final
 
 ---
 
