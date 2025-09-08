@@ -9,6 +9,7 @@ class Command(BaseCommand):
         parser.add_argument('--username', type=str, default='admin')
         parser.add_argument('--email', type=str, default='admin@atu.edu.gh')
         parser.add_argument('--password', type=str, default='admin123')
+        parser.add_argument('--noinput', action='store_true', help='Do not prompt for input')
 
     def handle(self, *args, **options):
         username = options['username']

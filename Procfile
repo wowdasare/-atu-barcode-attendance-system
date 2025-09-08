@@ -1,1 +1,1 @@
-web: python manage.py migrate && python debug_users.py && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:$PORT
+web: python manage.py migrate && python manage.py create_admin --noinput && python manage.py collectstatic --noinput && gunicorn atu_barcode_system.wsgi --bind 0.0.0.0:$PORT

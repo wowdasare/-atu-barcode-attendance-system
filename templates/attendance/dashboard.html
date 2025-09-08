@@ -3,70 +3,93 @@
 {% block title %}Dashboard - ATU Attendance System{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-    <div class="text-muted">
-        Welcome back, {{ lecturer.user.first_name }}!
+<!-- Modern Page Header -->
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="mb-2"><i class="fas fa-chart-line me-3"></i>Dashboard</h1>
+            <p class="text-muted fs-5 mb-0">Welcome back, <strong>{{ lecturer.user.first_name }} {{ lecturer.user.last_name }}</strong>! Here's your overview.</p>
+        </div>
+        <div class="text-end">
+            <div class="badge bg-light text-primary fs-6 p-3">
+                <i class="fas fa-calendar-day me-2"></i>{{ "now"|date:"M d, Y" }}
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Statistics Cards -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">My Courses</h5>
-                        <h2>{{ total_courses }}</h2>
+<!-- Enhanced Statistics Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-3 col-md-6">
+        <div class="card student-card border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-circle p-3" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-book text-white fs-4"></i>
+                        </div>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-book fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Active Sessions</h5>
-                        <h2>{{ active_sessions }}</h2>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-calendar-check fa-2x"></i>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-1" style="color: var(--primary-blue);">{{ total_courses }}</h3>
+                        <p class="text-muted mb-0">My Courses</p>
+                        <small class="text-success"><i class="fas fa-arrow-up"></i> Active</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Department</h5>
-                        <h6>{{ lecturer.department }}</h6>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card student-card border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-circle p-3" style="background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-calendar-check text-white fs-4"></i>
+                        </div>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-building fa-2x"></i>
+                    <div class="flex-grow-1 ms-3">
+                        <h3 class="fw-bold mb-1" style="color: var(--success-green);">{{ active_sessions }}</h3>
+                        <p class="text-muted mb-0">Active Sessions</p>
+                        <small class="text-success"><i class="fas fa-clock"></i> Live</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title">Lecturer ID</h5>
-                        <h6>{{ lecturer.lecturer_id }}</h6>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card student-card border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-circle p-3" style="background: linear-gradient(135deg, var(--accent-blue) 0%, var(--secondary-blue) 100%); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-building text-white fs-4"></i>
+                        </div>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-id-badge fa-2x"></i>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="fw-bold mb-1" style="color: var(--accent-blue);">{{ lecturer.department|truncatechars:20 }}</h6>
+                        <p class="text-muted mb-0">Department</p>
+                        <small class="text-info"><i class="fas fa-map-marker-alt"></i> ATU</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card student-card border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-circle p-3" style="background: linear-gradient(135deg, var(--warning-amber) 0%, #d97706 100%); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-id-badge text-white fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="fw-bold mb-1" style="color: var(--warning-amber);">{{ lecturer.lecturer_id }}</h6>
+                        <p class="text-muted mb-0">Lecturer ID</p>
+                        <small class="text-warning"><i class="fas fa-user-tie"></i> Staff</small>
                     </div>
                 </div>
             </div>
@@ -164,11 +187,6 @@
                     <div class="col-md-3 mb-2">
                         <a href="{% url 'attendance_web:student-list' %}" class="btn btn-outline-info btn-block w-100">
                             <i class="fas fa-users"></i> View Students
-                        </a>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <a href="/admin/" class="btn btn-outline-warning btn-block w-100">
-                            <i class="fas fa-cog"></i> Admin Panel
                         </a>
                     </div>
                 </div>

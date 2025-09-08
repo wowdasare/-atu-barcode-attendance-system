@@ -3,33 +3,151 @@
 {% block title %}Login - ATU Attendance System{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card mt-5">
-            <div class="card-header text-center bg-primary text-white">
-                <h4><i class="fas fa-qrcode"></i> ATU Attendance System</h4>
-                <p class="mb-0">System Login</p>
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        max-width: 450px;
+        width: 100%;
+    }
+    .login-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        padding: 3rem 2rem;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
+    .login-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    }
+    .login-header h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+    .login-header p {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin: 0;
+        position: relative;
+        z-index: 2;
+    }
+    .login-body {
+        padding: 3rem;
+    }
+    .form-floating {
+        margin-bottom: 2rem;
+    }
+    .form-floating .form-control {
+        height: 60px;
+        border-radius: 15px;
+        border: 2px solid #e5e7eb;
+        font-size: 1rem;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-floating .form-control:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        transform: translateY(-2px);
+    }
+    .form-floating label {
+        color: #6b7280;
+        font-weight: 500;
+    }
+    .login-btn {
+        width: 100%;
+        height: 55px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+    }
+    .login-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+    }
+    .login-footer {
+        background: #f8fafc;
+        padding: 2rem;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+    }
+    .university-logo {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.8rem;
+        color: white;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="university-logo">
+                <i class="fas fa-graduation-cap"></i>
             </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-center text-muted">
-                <small>Accra Technical University<br>Barcode Attendance System</small>
+            <h2>Welcome Back</h2>
+            <p>ATU Attendance System</p>
+        </div>
+        
+        <div class="login-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary login-btn">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </button>
+            </form>
+        </div>
+        
+        <div class="login-footer">
+            <div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="fas fa-qrcode me-2"></i>
+                <small>Accra Technical University<br>Barcode Attendance System v2.0</small>
             </div>
         </div>
     </div>

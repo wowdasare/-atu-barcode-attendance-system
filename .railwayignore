@@ -1,0 +1,19 @@
+# Railway deployment ignore file
+# Local development files
+.venv/
+venv/
+env/
+.env.local
+db.sqlite3
+*.pyc
+__pycache__/
+.DS_Store
+.git/
+.idea/
+cookies.txt
+
+# Don't ignore these important files
+!requirements.txt
+!runtime.txt
+!railway.json
+!Procfile

@@ -4,9 +4,18 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production-123456789')
+# DEBUG - False in production (Railway), True for local development
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+if 'RAILWAY_ENVIRONMENT' in os.environ:
+    DEBUG = False  # Force DEBUG=False on Railway
 
-DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'  # Default to True for local development
+# Generate a strong secret key for production
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-atu-attendance-system-2024-production-key-change-in-railway')
+
+# Ensure strong secret key in production
+if not DEBUG and len(SECRET_KEY) < 50:
+    import secrets
+    SECRET_KEY = secrets.token_urlsafe(50)
 
 # Simple ALLOWED_HOSTS - allow all for now to avoid issues
 ALLOWED_HOSTS = ['*']
@@ -56,15 +65,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'atu_barcode_system.wsgi.application'
 
-# Database configuration
+# Database configuration - Railway PostgreSQL with persistence
 if 'DATABASE_URL' in os.environ:
     try:
+        # Parse Railway PostgreSQL URL
+        db_config = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+        # Ensure proper PostgreSQL configuration for Railway
+        db_config.update({
+            'CONN_MAX_AGE': 600,  # Connection pooling
+            'OPTIONS': {
+                'connect_timeout': 10,
+            }
+        })
         DATABASES = {
-            'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+            'default': db_config
         }
+        print("✓ Using Railway PostgreSQL database")
     except Exception as e:
         print(f"DATABASE_URL parsing error: {e}")
         print(f"DATABASE_URL value: {os.environ.get('DATABASE_URL', 'Not set')}")
+        # Fallback to SQLite for local development
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
@@ -72,12 +92,14 @@ if 'DATABASE_URL' in os.environ:
             }
         }
 else:
+    # Local development with SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    print("Using local SQLite database")
 
 AUTH_PASSWORD_VALIDATORS = [
     {

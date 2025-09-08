@@ -3,122 +3,207 @@
 {% block title %}Manage Students - ATU Attendance System{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><i class="fas fa-user-graduate"></i> Manage Students</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
+<!-- Modern Page Header -->
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <h1 class="mb-2"><i class="fas fa-user-graduate me-3"></i>Student Management</h1>
+            <p class="text-muted fs-5 mb-0">Manage student records, generate QR codes, and track enrollment</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
             <a href="{% url 'attendance_web:add_student' %}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Student
+                <i class="fas fa-plus me-2"></i>Add Student
             </a>
-        </div>
-        <div class="btn-group">
             <a href="{% url 'attendance_web:export_students' %}" class="btn btn-success">
-                <i class="fas fa-download"></i> Export CSV
+                <i class="fas fa-download me-2"></i>Export CSV
             </a>
         </div>
     </div>
 </div>
 
-<!-- Search -->
-<div class="row mb-3">
-    <div class="col-md-6">
-        <form method="get" class="d-flex">
-            <input type="text" name="search" class="form-control me-2" placeholder="Search students..." value="{{ search_query }}">
-            <button type="submit" class="btn btn-outline-secondary">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-    </div>
-</div>
-
-<!-- Students Table -->
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Student ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Program</th>
-                        <th>Level</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in students %}
-                    <tr>
-                        <td><strong>{{ student.student_id }}</strong></td>
-                        <td>{{ student.first_name }} {{ student.last_name }}</td>
-                        <td>{{ student.email }}</td>
-                        <td>{{ student.program }}</td>
-                        <td>Level {{ student.level }}</td>
-                        <td>
-                            {% if student.is_active %}
-                                <span class="badge bg-success">Active</span>
-                            {% else %}
-                                <span class="badge bg-danger">Inactive</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="{% url 'attendance_web:edit_student' student.id %}" class="btn btn-outline-primary" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{% url 'attendance_web:generate_barcode' student.id %}" class="btn btn-outline-success" title="Generate Barcode">
-                                    <i class="fas fa-qrcode"></i>
-                                </a>
-                                <a href="{% url 'attendance_web:show_barcode' student.id %}" class="btn btn-outline-info" title="View Barcode">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{% url 'attendance_web:toggle_student_status' student.id %}" 
-                                   class="btn btn-outline-{% if student.is_active %}warning{% else %}success{% endif %}" 
-                                   title="{% if student.is_active %}Deactivate{% else %}Activate{% endif %}"
-                                   onclick="return confirm('Are you sure you want to {% if student.is_active %}deactivate{% else %}activate{% endif %} this student?')">
-                                    <i class="fas fa-{% if student.is_active %}ban{% else %}check{% endif %}"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center text-muted">No students found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<!-- Enhanced Search -->
+<div class="search-container mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <form method="get" class="d-flex align-items-center">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0" 
+                           placeholder="Search by ID, name, email, or program..." 
+                           value="{{ search_query }}" style="border-left: none !important;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                    {% if search_query %}
+                        <a href="?" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
         </div>
-
-        <!-- Pagination -->
-        {% if students.has_other_pages %}
-            <nav aria-label="Students pagination">
-                <ul class="pagination justify-content-center">
-                    {% if students.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page=1">First</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.previous_page_number }}">Previous</a>
-                        </li>
-                    {% endif %}
-
-                    <li class="page-item active">
-                        <span class="page-link">{{ students.number }} of {{ students.paginator.num_pages }}</span>
-                    </li>
-
-                    {% if students.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.next_page_number }}">Next</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.paginator.num_pages }}">Last</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+        <div class="col-md-4 text-end">
+            <div class="text-muted">
+                <i class="fas fa-users me-2"></i>
+                <strong>{{ students.paginator.count }}</strong> student{{ students.paginator.count|pluralize }} found
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Students Grid -->
+<div class="row g-4">
+    {% for student in students %}
+    <div class="col-lg-6 col-xl-4">
+        <div class="card student-card h-100">
+            <div class="card-body p-4">
+                <!-- Student Header -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle p-3 me-3" 
+                             style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-graduate text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0" style="color: var(--primary-blue);">{{ student.student_id }}</h6>
+                            <small class="text-muted">Student ID</small>
+                        </div>
+                    </div>
+                    {% if student.is_active %}
+                        <span class="badge bg-success px-3 py-2 rounded-pill">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger px-3 py-2 rounded-pill">Inactive</span>
+                    {% endif %}
+                </div>
+
+                <!-- Student Info -->
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-2">{{ student.first_name }} {{ student.last_name }}</h5>
+                    <div class="text-muted mb-2">
+                        <i class="fas fa-envelope me-2"></i>{{ student.email }}
+                    </div>
+                    <div class="text-muted mb-2">
+                        <i class="fas fa-graduation-cap me-2"></i>{{ student.program }}
+                    </div>
+                    <div class="text-muted">
+                        <i class="fas fa-layer-group me-2"></i>Level {{ student.level }}
+                    </div>
+                </div>
+
+                <!-- QR Code Preview -->
+                {% if student.barcode_image %}
+                <div class="text-center mb-4">
+                    <div class="p-3 bg-light rounded-3 d-inline-block">
+                        <img src="{{ student.barcode_image.url }}" class="barcode-img" 
+                             style="max-width: 60px; max-height: 60px;" 
+                             alt="QR Code for {{ student.student_id }}">
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-success"><i class="fas fa-check-circle me-1"></i>QR Code Ready</small>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center mb-4">
+                    <div class="p-4 bg-light rounded-3">
+                        <i class="fas fa-qrcode text-muted fs-2"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-warning"><i class="fas fa-exclamation-circle me-1"></i>QR Code Needed</small>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'attendance_web:edit_student' student.id %}" 
+                       class="btn btn-outline-primary btn-sm flex-fill" title="Edit Student">
+                        <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    
+                    {% if student.barcode_image %}
+                        <a href="{% url 'attendance_web:show_barcode' student.id %}" 
+                           class="btn btn-outline-info btn-sm flex-fill" title="View QR Code">
+                            <i class="fas fa-eye me-1"></i>View QR
+                        </a>
+                    {% else %}
+                        <a href="{% url 'attendance_web:generate_barcode' student.id %}" 
+                           class="btn btn-outline-success btn-sm flex-fill" title="Generate QR Code">
+                            <i class="fas fa-qrcode me-1"></i>Generate
+                        </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'attendance_web:toggle_student_status' student.id %}" 
+                       class="btn btn-outline-{% if student.is_active %}warning{% else %}success{% endif %} btn-sm" 
+                       title="{% if student.is_active %}Deactivate{% else %}Activate{% endif %} Student"
+                       onclick="return confirm('Are you sure you want to {% if student.is_active %}deactivate{% else %}activate{% endif %} this student?')">
+                        <i class="fas fa-{% if student.is_active %}ban{% else %}check{% endif %}"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="fas fa-user-graduate text-muted" style="font-size: 4rem;"></i>
+                <h4 class="text-muted mt-3 mb-2">No Students Found</h4>
+                <p class="text-muted mb-4">{% if search_query %}No students match your search criteria.{% else %}No students have been added yet.{% endif %}</p>
+                {% if not search_query %}
+                    <a href="{% url 'attendance_web:add_student' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add First Student
+                    </a>
+                {% else %}
+                    <a href="?" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-2"></i>Clear Search
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modern Pagination -->
+{% if students.has_other_pages %}
+<div class="d-flex justify-content-center mt-5">
+    <nav aria-label="Students pagination">
+        <ul class="pagination pagination-lg">
+            {% if students.has_previous %}
+                <li class="page-item">
+                    <a class="page-link rounded-start" href="?{% if search_query %}search={{ search_query }}&{% endif %}page=1">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.previous_page_number }}">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link bg-primary border-primary">
+                    {{ students.number }} of {{ students.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if students.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.next_page_number }}">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link rounded-end" href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ students.paginator.num_pages }}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}
 {% endblock %}

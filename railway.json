@@ -2,9 +2,9 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "python manage.py migrate && python manage.py collectstatic --noinput && python create_users.py"
+    "buildCommand": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py create_admin --noinput"
   },
   "deploy": {
-    "startCommand": "python manage.py runserver 0.0.0.0:$PORT"
+    "startCommand": "gunicorn atu_barcode_system.wsgi --bind 0.0.0.0:$PORT"
   }
 }
