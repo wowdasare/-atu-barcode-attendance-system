@@ -203,7 +203,11 @@ class AttendanceRecordListView(generics.ListAPIView):
         try:
             lecturer = self.request.user.lecturer
             session = AttendanceSession.objects.get(session_id=session_id, lecturer=lecturer)
-            return AttendanceRecord.objects.filter(session=session).order_by('student__student_id')
+            # Only return records where students have been scanned (have check_in_time)
+            return AttendanceRecord.objects.filter(
+                session=session, 
+                check_in_time__isnull=False
+            ).order_by('student__student_id')
         except (Lecturer.DoesNotExist, AttendanceSession.DoesNotExist):
             return AttendanceRecord.objects.none()
 
